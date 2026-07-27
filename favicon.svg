@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Arkansas EFA — the published record">
+  <rect width="32" height="32" rx="7" fill="#1F3B57"/>
+  <!-- the badge system, which is the page's thesis: published / derived / absent,
+       strongest claim to weakest, in the same --verify-* ramp the site uses -->
+  <circle cx="16" cy="8.5"  r="3.6" fill="#4fc9b3"/>
+  <circle cx="16" cy="16"   r="3.6" fill="#6fc0dc"/>
+  <circle cx="16" cy="23.5" r="3.6" fill="#a3a099"/>
+</svg>

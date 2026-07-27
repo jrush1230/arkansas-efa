@@ -1,0 +1,500 @@
+/* Arkansas EFA — the published record. Shared design system.
+ *
+ * Third site in the Sidetown Labs estate, after the Arkansas Enrollment and
+ * Arkansas Fiscal Mechanics tools. The token block below is the SHARED
+ * vocabulary, carried across byte-identical from the fiscal site's app.css:
+ * surfaces, text, gridline, border, link, --brand-caret, --band-efa, the
+ * --verify-* ordinal ramp, --prelim, and --cat-1..7. A change to any of those
+ * declarations is a change to all three repos, in the same session. Do not
+ * fork the palette.
+ *
+ * Deliberately NOT copied: the fiscal site's chart-specific tokens
+ * (--series-*, --gap-*, --bar-*, --layer-*, --cushion, --growth) and
+ * --band-covid. Those encode that tool's own chart semantics — a lagged-ADM
+ * line pair, a four-layer revenue stack, a COVID era band — none of which
+ * exists here. Shipping them would be dead CSS pretending to be shared
+ * vocabulary, which is worse for drift detection than their absence. The
+ * fiscal repo holds the canonical copy of everything that IS shared.
+ *
+ * The --verify-* ramp is reused with this site's own three-value meaning:
+ * published (the state printed this number) / derived (we computed it from
+ * numbers the state printed) / absent (the state has not published it). Same
+ * ordinal logic the fiscal tool uses — strongest claim gets the strongest
+ * token — and the same rule that the text label is mandatory, so colour is
+ * never the sole channel. The badge system IS the thesis of this page.
+ */
+
+:root {
+  --surface-1:      #fcfcfb;
+  --page-plane:     #f9f9f7;
+  --text-primary:   #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted:     #898781;
+  --gridline:       #e1e0d9;
+  --border:         rgba(11,11,11,0.44);
+  --link:           #2a78d6;
+
+  /* Brand caret — the one coloured element of the Sidetown Labs wordmark.
+     Values are the brand spec's own "accent caret", light and dark, not the
+     site's --link, because the mark is not to be recoloured per site.
+     Shared vocabulary across both sibling sites and the homepage (keep
+     byte-identical). */
+  --brand-caret: #2B7EC9;
+  --band-efa:       rgba(27, 175, 122, 0.09);
+
+  /* Verification badges (ordinal: exact strongest -> observed weakest).
+     Light mode: darker/more-saturated teal = stronger. Each has a matching
+     faint --*-bg fill for the pill background. */
+  --verify-exact:      #0f6b5c;
+  --verify-exact-bg:   rgba(15, 107, 92, 0.12);
+  --verify-applied:    #3a8fb0;
+  --verify-applied-bg: rgba(58, 143, 176, 0.12);
+  --verify-observed:   #7d7a73;
+  --verify-observed-bg: rgba(125, 122, 115, 0.13);
+
+  /* Preliminary / computed marker (fy36) -- amber, distinct from the
+     verification ramp; means "this figure is provisional," a different axis
+     from how-verified. */
+  --prelim:            #b5730c;
+  --prelim-bg:         rgba(181, 115, 12, 0.12);
+
+  /* Categorical palette — shared vocabulary across both sibling sites (keep byte-identical). */
+  --cat-1: #2a78d6;   /* blue   */
+  --cat-2: #eb6834;   /* orange */
+  --cat-3: #1baf7a;   /* teal   */
+  --cat-4: #008300;   /* green  */
+  --cat-5: #008300;   /* green (brightens in dark) */
+  --cat-6: #e87ba4;   /* pink   */
+  --cat-7: #eda100;   /* amber  */
+
+  /* ── Site-local tokens — NOT part of the shared estate vocabulary ──────────
+     These two exist only here. They are declared after the shared block, never
+     inside it, so the drift check in scripts/spot_check.py can compare the
+     shared declarations against the fiscal repo's without tripping over them.
+
+     --neutral: the "prior year / inactive" mark. The chart grammar needs a
+     recessive fill that is not a category and not a gridline — the earlier bar
+     of a dumbbell, the empty cell of the coverage matrix. --text-muted is text
+     ink and --gridline is a hairline; neither survives as a 26px fill.
+
+     --obtained: the fourth provenance badge. State-held records released to a
+     requester under FOIA and published by someone else — a different claim from
+     "the state published this", and the absence register's own "collected, not
+     published" category surfacing in the main body. Violet is deliberately off
+     the teal→blue→grey ordinal ramp, because this is a different axis rather
+     than a weaker rung, and it must not read as the amber "provisional" marker,
+     which is a third axis again. Validated against --prelim in both modes:
+     ΔE 25.8 protan / 18.5 tritan / 27.0 normal in light, all six palette checks
+     pass. */
+  --neutral:      #b4b2ab;
+  --obtained:     #6b4fa8;
+  --obtained-bg:  rgba(107, 79, 168, 0.12);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface-1:      #1a1a19;
+    --page-plane:     #0d0d0d;
+    --text-primary:   #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted:     #898781;
+    --gridline:       #2c2c2a;
+    --border:         rgba(255,255,255,0.33);
+    --link:           #3987e5;
+
+    --brand-caret: #60AAF3;
+    --band-efa:       rgba(25, 158, 112, 0.12);
+
+    /* Dark mode: brighter teal = stronger (inverted from light, same as the
+       enrollment tool inverts its ramps). */
+    --verify-exact:      #4fc9b3;
+    --verify-exact-bg:   rgba(79, 201, 179, 0.16);
+    --verify-applied:    #6fc0dc;
+    --verify-applied-bg: rgba(111, 192, 220, 0.15);
+    --verify-observed:   #a3a099;
+    --verify-observed-bg: rgba(163, 160, 153, 0.15);
+
+    --prelim:            #e0a44a;
+    --prelim-bg:         rgba(224, 164, 74, 0.16);
+
+    --cat-1: #3987e5;
+    --cat-2: #d95926;
+    --cat-3: #199e70;
+    --cat-4: #008300;
+    --cat-5: #35a854;
+    --cat-6: #d55181;
+    --cat-7: #c98500;
+
+    /* Site-local, as above. Dark mode is selected, not flipped: the violet is
+       lifted to clear the near-black plane and re-validated against --prelim
+       there (ΔE 25.2 protan / 15.9 tritan / 25.8 normal, contrast >= 3:1). */
+    --neutral:      #5a5852;
+    --obtained:     #9d7fd6;
+    --obtained-bg:  rgba(157, 127, 214, 0.17);
+  }
+}
+
+/* Respect a reader's data-theme override the same way the Artifact/enrollment
+   conventions do -- explicit toggle wins over the OS preference in both
+   directions. (Present for parity; the static site itself ships no toggle
+   today, but any future one will Just Work.) */
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"]  { color-scheme: dark; }
+
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  background: var(--page-plane);
+  color: var(--text-primary);
+  font: 15px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+/* Two content widths, same two the fiscal site uses: the 720px reading column
+   for prose, and a wide plane for figures that need horizontal room. This is a
+   single long-form page, so it runs on .page and lets individual figures widen
+   themselves inside .figure-wide rather than switching container class. */
+.page { max-width: 720px; margin: 0 auto; padding: 40px 24px 80px; }
+.page-wide { max-width: 1400px; margin: 0 auto; padding: 40px 24px 80px; }
+
+/* ── Sidetown Labs wordmark header ──────────────────────────────────────────
+   Ships on every page of both sibling sites and reproduces the header on
+   sidetownlabs.com: same 64px row, same 23px wordmark, same caret geometry
+   from the brand spec. Keep this block
+   byte-identical between the two repos -- it is brand furniture, not
+   site-specific chrome. (Design unification Phase 1b; the review's "single
+   highest-leverage change for family consistency".)
+
+   Two deliberate deviations from the homepage's version:
+
+   1. NOT sticky. The homepage header is position:sticky, but these are data
+      sites: school-districts / charter-schools / the fiscal tables all use
+      sticky <th> at top:0, and a sticky site header would either overlap them
+      or force a 64px offset into every table's sticky math. The wordmark is
+      an identity marker, not a navigation control, so it scrolls away.
+   2. No nav or theme button inside it. Each site keeps its existing
+      .view-nav exactly as-is, directly below -- the brief's requirement, and
+      it avoids two competing navigation rows.
+
+   Width: the inner element carries the page's OWN container class (.page or
+   .page-wide), so the wordmark aligns with that page's h1 at every width
+   without any per-page plumbing. The two-class selector below outranks the
+   per-page `.page { padding: ... }` rules that pages declare in their own
+   inline <style> after this sheet loads, so source order doesn't matter. */
+@font-face {
+  /* Latin subset of the Space Grotesk variable font, weights 300-700, so both
+     the 600 "sidetown" and the 450 "labs" are real instances rather than
+     synthesised. Self-hosted (22 KB) rather than fetched from Google Fonts:
+     these are no-build static sites, and a render-blocking third-party
+     request on all 20 data pages is a bad trade for one 23px wordmark.
+     Licence: SIL OFL 1.1, shipped beside it as space-grotesk-OFL.txt. */
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url("space-grotesk-latin.woff2") format("woff2");
+}
+.site-header { background: var(--page-plane); border-bottom: 1px solid var(--gridline); }
+.site-header .page,
+.site-header .page-wide { display: flex; align-items: center; min-height: 64px; padding-block: 0; }
+.wordmark {
+  display: inline-flex; align-items: baseline;
+  font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
+  font-size: 23px; line-height: 1; letter-spacing: -0.028em;
+  color: var(--text-primary); text-decoration: none; white-space: nowrap;
+}
+/* Caret geometry is the brand spec's, expressed in em so it tracks font-size:
+   width 0.37em, height 0.783em, one caret-width (0.348em) of space before the
+   "s". The 0.0833em bottom offset is the spec's "8px above baseline at 96px". */
+.wordmark .caret {
+  display: inline-block; flex: none; vertical-align: baseline;
+  width: 0.37em; height: 0.783em; margin-right: 0.348em; margin-bottom: 0.0833em;
+  background: var(--brand-caret);
+}
+.wordmark .st { font-weight: 600; }
+.wordmark .lb { font-weight: 450; color: var(--text-secondary); }
+.wordmark:focus-visible { outline: 2px solid var(--brand-caret); outline-offset: 4px; }
+
+.view-nav { font-size: 13px; color: var(--text-muted); margin: 0 0 18px; }
+.view-nav a { color: var(--link); }
+.view-nav .current { color: var(--text-primary); font-weight: 600; }
+
+h1 { font-size: 26px; font-weight: 700; margin: 0 0 14px; line-height: 1.25; }
+.lede { font-size: 17px; font-weight: 600; color: var(--text-primary); margin: 0 0 16px; }
+p { margin: 0 0 16px; color: var(--text-secondary); }
+p a, li a { color: var(--link); }
+
+h2 {
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+  margin: 36px 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--gridline);
+}
+
+/* Hero stats -- same anatomy as the enrollment landing (large tabular-nums
+   figures, ink tokens only, no red/green coloring of headline numbers). */
+.hero-stats { display: flex; flex-wrap: wrap; gap: 20px; margin: 20px 0 40px; }
+.hero-stat { flex: 1 1 180px; min-width: 0; }
+.hero-stat .stat-number {
+  font-size: 34px; font-weight: 800; line-height: 1.1;
+  color: var(--text-primary); font-variant-numeric: tabular-nums; letter-spacing: -0.01em;
+}
+.hero-stat .stat-label { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+
+/* ── The badge system ────────────────────────────────────────────────────────
+   The one thing this site does that nothing else does for this programme:
+   every figure declares what KIND of claim it is before the reader reads the
+   number. Three values, ordinal in how strong a claim they license:
+
+     published  the state printed this number in a report we can cite
+     derived    we computed it from numbers the state printed; the arithmetic
+                is stated and cross-checked on the page
+     obtained   state-held records released to a named requester under FOIA and
+                published by someone else — not published by the state
+     absent     the state has not published this, and we checked on a date
+
+   "obtained" is not a fourth concept diluting three. It is the absence
+   register's own `collected, not published` category surfacing in the main
+   body: the register row says the state holds tuition data and will not print
+   it, and the chart shows the number a requester got anyway. The two cross-link
+   on the page deliberately, and the badge is what makes that legible.
+
+   Rendered on the same .verify-badge pill the fiscal site uses, against the
+   same --verify-* token pairs, so a reader who has seen that site reads this
+   badge as the same object. The text label is mandatory: colour is never the
+   sole channel. `data-verify` = published | derived | obtained | absent. */
+.verify-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: 600; line-height: 1;
+  padding: 3px 8px; border-radius: 999px;
+  white-space: nowrap; vertical-align: middle;
+}
+.verify-badge .verify-dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+.verify-badge[data-verify="published"] { color: var(--verify-exact);    background: var(--verify-exact-bg); }
+.verify-badge[data-verify="published"] .verify-dot { background: var(--verify-exact); }
+.verify-badge[data-verify="derived"]   { color: var(--verify-applied);  background: var(--verify-applied-bg); }
+.verify-badge[data-verify="derived"]   .verify-dot { background: var(--verify-applied); }
+.verify-badge[data-verify="obtained"]  { color: var(--obtained);        background: var(--obtained-bg); }
+.verify-badge[data-verify="obtained"]  .verify-dot { background: var(--obtained); }
+.verify-badge[data-verify="absent"]    { color: var(--verify-observed); background: var(--verify-observed-bg); }
+.verify-badge[data-verify="absent"]    .verify-dot { background: var(--verify-observed); }
+
+/* Preliminary marker pill (fy36). */
+.prelim-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: 600; line-height: 1;
+  padding: 3px 8px; border-radius: 999px; white-space: nowrap;
+  color: var(--prelim); background: var(--prelim-bg);
+}
+
+/* Meta links + footer -- footer carries the same author bio the enrollment
+   tool uses (the footer-methodology convention the handoff calls out); the
+   exact prose lives in each page so it's greppable/editable, but the styling
+   is shared here. */
+.meta-links { margin-top: 28px; font-size: 13px; color: var(--text-muted); }
+.meta-links a { color: var(--text-secondary); }
+.site-footer {
+  margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--gridline);
+  font-size: 13px; color: var(--text-muted);
+}
+.site-footer a { color: var(--text-secondary); }
+
+/* Data vintage -- "how fresh is this?", answered in every footer, built from
+   the data files themselves (see scripts/build_vintage.py). */
+.vintage {
+  margin: 10px 0 0; font-size: 12px; color: var(--text-muted); line-height: 1.6;
+}
+.vintage strong { color: var(--text-secondary); font-weight: 600; }
+
+/* Companion-site cross-link -- points readers to the sibling K-12 enrollment
+   and fiscal sites. */
+.companion { margin: 10px 0 0; font-size: 13px; }
+
+/* Skip link -- first focusable element on every page, visible only on focus. */
+.skip-link {
+  position: absolute; left: 8px; top: -48px; z-index: 100;
+  background: var(--surface-1); color: var(--link);
+  border: 1px solid var(--link); border-radius: 8px;
+  padding: 9px 14px; font-size: 14px; font-weight: 600; text-decoration: none;
+  transition: top 120ms;
+}
+.skip-link:focus { top: 8px; }
+/* the landmark itself must not draw a focus ring when targeted by the skip link */
+main:focus { outline: none; }
+
+/* Available to assistive tech, invisible on screen -- for header rows that a
+   sighted reader gets from layout but a screen reader has no other route to. */
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; margin: -1px;
+  padding: 0; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%);
+  white-space: nowrap; border: 0;
+}
+
+/* Tabular figures everywhere numbers are compared in a column. */
+.num { font-variant-numeric: tabular-nums; }
+
+/* Glossary term -- a dotted-underline span with a plain-language tooltip on
+   hover, focus, or tap. See shared.js initGlossary. */
+.gloss {
+  text-decoration: underline dotted var(--text-muted);
+  text-underline-offset: 2px;
+  cursor: help;
+}
+.gloss:hover, .gloss:focus-visible { text-decoration-color: var(--link); color: var(--text-primary); }
+.gloss:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; border-radius: 2px; }
+.gloss-tip {
+  position: absolute; z-index: 50; max-width: 300px;
+  background: var(--surface-1); color: var(--text-secondary);
+  border: 1px solid var(--border); border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.18);
+  padding: 9px 12px; font-size: 12.5px; line-height: 1.45;
+}
+
+/* ══ Chart grammar ═══════════════════════════════════════════════════════════
+   Ported from the approved chart pack (design/EFA_chart_pack_v6.html). Lives
+   here rather than in a per-page <style> because both pages use the card,
+   source-line, pill and table rules — the estate's rule is that anything
+   identical on two pages belongs in a linked sheet. */
+
+/* This site's content column. The estate's other two sites run 720/880/1400;
+   the chart pack was composed at 1040 and its SVG viewBoxes are 900 wide, so
+   that is the width kept here. .page (720) stays for the prose page. */
+.page-wide { max-width: 1040px; }
+
+.masthead { padding: 46px 0 28px; border-bottom: 1px solid var(--gridline); margin-bottom: 34px; }
+.kicker {
+  font-family: "Space Grotesk", system-ui, sans-serif; font-size: 12px;
+  letter-spacing: .13em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 14px;
+}
+.masthead h1 { font-size: clamp(28px, 4vw, 42px); line-height: 1.12; margin: 0 0 12px; }
+.masthead .lede { font-size: 17px; font-weight: 400; color: var(--text-secondary); max-width: 74ch; }
+
+h1, h2, h3, .display {
+  font-family: "Space Grotesk", system-ui, sans-serif; font-weight: 600; letter-spacing: -0.01em;
+}
+section { margin: 0 0 46px; }
+/* Section headings here are titles, not the fiscal site's uppercase rules. */
+section > h2 {
+  font-size: 23px; margin: 0 0 6px; text-transform: none; letter-spacing: -0.01em;
+  color: var(--text-primary); border-bottom: 0; padding-bottom: 0; font-weight: 600;
+}
+section > p { max-width: 70ch; }
+
+.card {
+  background: var(--surface-1); border: 1px solid var(--gridline); border-radius: 10px;
+  padding: 20px 22px 18px; margin-top: 14px;
+}
+.srcline { font-size: 12px; color: var(--text-muted); margin: 12px 0 0; max-width: none; }
+.srcline a { color: var(--link); }
+
+/* Part dividers — the six-part spine of the argument. */
+.part { border-top: 2px solid var(--border); margin: 64px 0 8px; padding-top: 22px; }
+.part .n {
+  font-family: "Space Grotesk", system-ui, sans-serif; font-size: 12px; letter-spacing: .13em;
+  text-transform: uppercase; color: var(--text-muted); margin: 0;
+}
+.part h2 { font-size: 31px; margin: 8px 0 8px; text-transform: none; letter-spacing: -0.01em;
+  color: var(--text-primary); border-bottom: 0; padding-bottom: 0; }
+.part p { font-size: 16px; }
+
+/* KPI row — the estate's .hero-stat anatomy, boxed as the pack has it. */
+.hero-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.hero-stat {
+  background: var(--surface-1); border: 1px solid var(--gridline);
+  border-radius: 10px; padding: 14px 16px;
+}
+.hero-stat .stat-number {
+  font-family: "Space Grotesk", system-ui, sans-serif; font-size: 27px; font-weight: 600;
+  line-height: 1.1; letter-spacing: -0.02em;
+}
+.hero-stat .stat-label { font-size: 12.5px; color: var(--text-secondary); margin-top: 5px; line-height: 1.35; }
+.hero-stat .stat-sub { font-size: 11.5px; color: var(--text-muted); margin-top: 3px; }
+
+.legend { display: flex; flex-wrap: wrap; gap: 14px; margin: 2px 0 12px; font-size: 12.5px; color: var(--text-secondary); }
+.legend .key { display: inline-flex; align-items: center; gap: 6px; }
+.legend .sw { width: 11px; height: 11px; border-radius: 3px; display: inline-block; flex: none; }
+
+/* Inline marker pills. Distinct from .verify-badge: that one declares a whole
+   figure's provenance, these annotate one fact inside a source line. */
+.pill {
+  display: inline-block; font-size: 11px; padding: 1.5px 7px; border-radius: 99px;
+  font-weight: 600; letter-spacing: .02em; vertical-align: middle;
+}
+.pill.prelim   { color: var(--prelim);          background: var(--prelim-bg); }
+.pill.exact    { color: var(--verify-exact);    background: var(--verify-exact-bg); }
+.pill.obs      { color: var(--verify-observed); background: var(--verify-observed-bg); }
+.pill.obtained { color: var(--obtained);        background: var(--obtained-bg); }
+
+/* SVG primitives. Charts scale by viewBox; wide ones scroll inside .card. */
+.card svg { display: block; width: 100%; height: auto; overflow: visible; }
+.gl  { stroke: var(--gridline); stroke-width: 1; }
+.ax  { fill: var(--text-muted); font-size: 11.5px; }
+.lbl { fill: var(--text-secondary); font-size: 12px; }
+.val { fill: var(--text-primary); font-size: 12px; font-weight: 600;
+       font-family: "Space Grotesk", system-ui, sans-serif; }
+.mark { transition: opacity .12s; }
+.mark:hover { opacity: .75; cursor: default; }
+
+#tt {
+  position: fixed; pointer-events: none; opacity: 0; transition: opacity .1s; z-index: 99;
+  background: var(--text-primary); color: var(--page-plane); font-size: 12.5px; line-height: 1.45;
+  padding: 7px 10px; border-radius: 7px; max-width: 280px; box-shadow: 0 4px 14px rgba(0,0,0,.22);
+}
+#tt b { font-family: "Space Grotesk", system-ui, sans-serif; }
+
+table { border-collapse: collapse; width: 100%; font-size: 13px; margin-top: 10px; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--gridline); vertical-align: top; }
+th { font-size: 11.5px; text-transform: uppercase; letter-spacing: .06em; color: var(--text-muted); font-weight: 600; }
+td.n { text-align: right; font-variant-numeric: tabular-nums; }
+.table-scroll { overflow-x: auto; }
+
+.note {
+  border-left: 3px solid var(--prelim); background: var(--prelim-bg); padding: 11px 15px;
+  border-radius: 0 7px 7px 0; font-size: 13.5px; color: var(--text-secondary); margin: 14px 0 0;
+}
+.note p { margin: 0; color: inherit; max-width: none; }
+.note p + p { margin-top: 9px; }
+
+nav.toc {
+  background: var(--surface-1); border: 1px solid var(--gridline); border-radius: 10px;
+  padding: 16px 20px; margin: 26px 0 8px;
+}
+nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 32px; font-size: 14px; }
+@media (max-width: 640px) { nav.toc ol { columns: 1; } }
+nav.toc a { color: var(--link); text-decoration: none; }
+nav.toc a:hover { text-decoration: underline; }
+
+.howto { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin: 16px 0 0; }
+.howto > div { background: var(--surface-1); border: 1px solid var(--gridline); border-radius: 10px; padding: 13px 15px; }
+.howto p { font-size: 12.5px; margin: 6px 0 0; max-width: none; }
+
+/* Absence register rows. */
+.reg { margin-top: 14px; }
+.reg .row { border-bottom: 1px solid var(--gridline); padding: 13px 2px; }
+.reg .row:last-child { border-bottom: 0; }
+.reg .f { font-weight: 600; color: var(--text-primary); font-size: 14.5px; }
+.reg .k {
+  font-size: 10.5px; text-transform: uppercase; letter-spacing: .05em; font-weight: 600;
+  padding: 2px 8px; border-radius: 99px; margin-left: 9px; white-space: nowrap;
+  display: inline-block;
+}
+.reg .probe { font-size: 13px; color: var(--text-secondary); margin-top: 5px; max-width: 88ch; }
+.reg .got {
+  font-size: 13px; margin-top: 6px; padding: 7px 11px; border-radius: 7px;
+  background: var(--obtained-bg); color: var(--text-secondary); max-width: 88ch;
+}
+.reg .got b { color: var(--obtained); }
+
+/* Inline download links — the machine-readable files, offered beside the
+   figure they belong to rather than only from a downloads list. */
+.downloads { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.dl-btn {
+  display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600;
+  padding: 5px 11px; border-radius: 7px; text-decoration: none;
+  color: var(--link); background: var(--surface-1); border: 1px solid var(--gridline);
+}
+.dl-btn:hover, .dl-btn:focus-visible { border-color: var(--link); }
+.dl-btn .ext { color: var(--text-muted); font-weight: 400; }

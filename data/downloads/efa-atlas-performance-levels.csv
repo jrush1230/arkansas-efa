@@ -1,0 +1,15 @@
+efa_fy,school_year,scope,school_name,subject,pct_level_1,pct_level_2,pct_level_3,pct_level_4,source_table,source_file
+35,2024-25,all_atlas_takers,,ELA,7,44,33,16,Table 11,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,all_atlas_takers,,Math,13,35,36,16,Table 11,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,all_atlas_takers,,Science,17,41,29,12,Table 11,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,school,CLEAR SPRING SCHOOL,ELA,0,43,57,0,Appendix D,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,school,CLEAR SPRING SCHOOL,Math,43,57,0,0,Appendix D,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,school,FAYETTEVILLE CHRISTIAN SCHOOL,ELA,11,43,37,9,Appendix D,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,school,FAYETTEVILLE CHRISTIAN SCHOOL,Math,15,39,40,7,Appendix D,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,school,FAYETTEVILLE CHRISTIAN SCHOOL,Science,13,35,35,16,Appendix D,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,school,HARDING ACADEMY,ELA,6,43,30,20,Appendix D,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,school,HARDING ACADEMY,Math,9,34,37,20,Appendix D,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,school,HARDING ACADEMY,Science,19,42,27,12,Appendix D,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,school,SOUTH ARKANSAS CHRISTIAN SCHOOL,ELA,7,54,29,11,Appendix D,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,school,SOUTH ARKANSAS CHRISTIAN SCHOOL,Math,26,30,26,17,Appendix D,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,school,SOUTH ARKANSAS CHRISTIAN SCHOOL,Science,15,46,31,8,Appendix D,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf

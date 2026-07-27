@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://arkansas-efa.sidetownlabs.com/sitemap.xml

@@ -1,0 +1,43 @@
+efa_fy,school_year,cohort,category,amount_usd,transactions,avg_per_transaction_usd,source_table,source_file
+35,2024-25,all_students,Private school tuition & fees,68348251,82764,825.82,Table 3,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,all_students,Supplies,7100421,39761,178.58,Table 3,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,all_students,Curriculum,3185511,18829,169.18,Table 3,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,all_students,Homeschool tuition & fees,3151409,4589,686.73,Table 3,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,all_students,Enrichment,1269768,6847,185.45,Table 3,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,all_students,Tutoring,904650,2592,349.02,Table 3,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,all_students,Therapy,344276,1173,293.5,Table 3,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,all_students,Uniforms,263958,1946,135.64,Table 3,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,all_students,Assessment,152027,2411,63.06,Table 3,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,all_students,College tuition/fees/supplies,68745,176,390.6,Table 3,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,all_students,Account management,55057,14909,3.69,Table 3,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,all_students,Disability evaluation,45725,99,461.87,Table 3,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,all_students,Transportation,32916,181,181.86,Table 3,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,all_students,Refunds / cancellations,-416488,4325,-96.3,Table 3,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,private_school_students,Private school tuition & fees,67903068,81941,828.68,Table 4,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,private_school_students,Supplies,1426419,6123,232.96,Table 4,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,private_school_students,Uniforms,241634,1735,139.27,Table 4,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,private_school_students,Tutoring,175473,551,318.46,Table 4,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,private_school_students,Curriculum,152707,815,187.37,Table 4,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,private_school_students,Enrichment,106487,506,210.45,Table 4,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,private_school_students,Therapy,80372,280,287.04,Table 4,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,private_school_students,Homeschool tuition & fees,22287,38,586.5,Table 4,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,private_school_students,Disability evaluation,15578,33,472.06,Table 4,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,private_school_students,Assessment,5391,53,101.72,Table 4,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,private_school_students,College tuition/fees/supplies,4974,15,331.6,Table 4,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,private_school_students,Account management,4139,1776,2.33,Table 4,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,private_school_students,Transportation,1187,6,197.83,Table 4,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,private_school_students,Refunds / cancellations,-176366,1513,-116.57,Table 4,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,homeschool_students,Supplies,5674003,33638,168.68,Table 5,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,homeschool_students,Curriculum,3032804,18014,168.36,Table 5,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,homeschool_students,Homeschool tuition & fees,3129122,4551,687.57,Table 5,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,homeschool_students,Enrichment,1163281,6341,183.45,Table 5,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,homeschool_students,Tutoring,729177,2041,357.26,Table 5,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,homeschool_students,Private school tuition & fees,445183,823,540.93,Table 5,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,homeschool_students,Therapy,263904,893,295.53,Table 5,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,homeschool_students,Assessment,146636,2358,62.19,Table 5,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,homeschool_students,College tuition/fees/supplies,63771,161,396.09,Table 5,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,homeschool_students,Account management,50918,13133,3.88,Table 5,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,homeschool_students,Transportation,31729,175,181.31,Table 5,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,homeschool_students,Disability evaluation,30147,66,456.77,Table 5,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,homeschool_students,Uniforms,22324,211,105.8,Table 5,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf
+35,2024-25,homeschool_students,Refunds / cancellations,-221480,2783,-79.58,Table 5,2024-25_Arkansas_Education_Freedom_Accounts_Program_Annual_Report_100125_OSCPE.pdf

@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Methodology &amp; sources — Arkansas EFA</title>
+<meta name="description" content="How the Arkansas EFA published-record page is built: sources, the four provenance badges, the derived figures and their cross-checks, and every known anomaly in the source documents.">
+<link rel="canonical" href="https://arkansas-efa.sidetownlabs.com/methodology.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Methodology &amp; sources — Arkansas EFA">
+<meta property="og:description" content="Sources, badges, cross-checks and every known anomaly in Arkansas's EFA reporting.">
+<meta property="og:url" content="https://arkansas-efa.sidetownlabs.com/methodology.html">
+<meta property="og:image" content="https://arkansas-efa.sidetownlabs.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="app.css">
+<style>
+  /* Prose page: narrower column, and headings behave as document headings
+     rather than the chart page's figure titles. */
+  .page h2 { font-size: 15px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: .02em; color: var(--text-muted); margin: 36px 0 14px;
+    padding-bottom: 8px; border-bottom: 1px solid var(--gridline); }
+  .page h3 { font-size: 15px; margin: 24px 0 6px; color: var(--text-primary); }
+  .page ul, .page ol { color: var(--text-secondary); padding-left: 22px; }
+  .page li { margin-bottom: 7px; }
+  dl.badges { margin: 14px 0 0; }
+  dl.badges dt { margin-top: 12px; }
+  dl.badges dd { margin: 4px 0 0; color: var(--text-secondary); }
+  code { font-size: 12.5px; background: var(--surface-1); border: 1px solid var(--gridline);
+    border-radius: 4px; padding: 1px 5px; }
+  pre { background: var(--surface-1); border: 1px solid var(--gridline); border-radius: 8px;
+    padding: 14px 16px; overflow-x: auto; font-size: 12.5px; line-height: 1.5;
+    color: var(--text-secondary); }
+  pre code { background: none; border: 0; padding: 0; }
+  blockquote { margin: 14px 0; padding: 11px 16px; border-left: 3px solid var(--obtained);
+    background: var(--obtained-bg); border-radius: 0 7px 7px 0; color: var(--text-secondary);
+    font-size: 14px; }
+  blockquote p { margin: 0; }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="page">
+    <a class="wordmark" href="https://sidetownlabs.com/">
+      <span class="caret" aria-hidden="true"></span><span class="st">sidetown</span><span class="lb">labs</span>
+    </a>
+  </div>
+</header>
+
+<div class="page">
+<main id="main" tabindex="-1">
+
+<p class="view-nav"><a href="./">The published record</a> · <span class="current">Methodology &amp; sources</span></p>
+
+<h1>Methodology &amp; sources</h1>
+<p class="lede">How this page is built, what each badge means, what is computed rather than
+transcribed, and every defect known to exist in the source documents.</p>
+
+<h2>What this is</h2>
+<p>Everything Arkansas has published about its Education Freedom Account programme, charted. The
+programme's entire published record is two annual reports, a series of appropriation acts, and a
+homeschool count series. The page draws all of it, and then records what is missing.</p>
+
+<h2>The four badges</h2>
+<p>Every figure declares what kind of claim it is before you read the number.</p>
+<dl class="badges">
+  <dt><span class="verify-badge" data-verify="published"><span class="verify-dot"></span>published</span></dt>
+  <dd>The state printed it in a report or an appropriation act. Reproduced, not recalculated.
+  Where the source states a total, the transcription is checked against it.</dd>
+  <dt><span class="verify-badge" data-verify="derived"><span class="verify-dot"></span>derived</span></dt>
+  <dd>Arithmetic on published figures, with the arithmetic shown, plus an independent cross-check
+  against a different published figure.</dd>
+  <dt><span class="verify-badge" data-verify="obtained"><span class="verify-dot"></span>obtained</span></dt>
+  <dd>State-held records released to a named requester under freedom-of-information law and
+  published by someone else &mdash; not published by the state.</dd>
+  <dt><span class="verify-badge" data-verify="absent"><span class="verify-dot"></span>absent</span></dt>
+  <dd>The state does not publish it. Each entry records what was checked, where, when, and what
+  came back.</dd>
+</dl>
+<p style="margin-top:16px"><em>Obtained</em> is not a fourth concept diluting three. It is the
+absence register's own &ldquo;collected, not published&rdquo; category seen from the other side:
+the register row says the state holds tuition data and will not print it, and the chart shows the
+number a requester got anyway. They cross-link on the page deliberately.</p>
+
+<h2>Sources</h2>
+<h3>Primary &mdash; the state's own publications</h3>
+<ul>
+  <li><strong>2023-24 EFA Annual Report</strong> (OSCPE) &mdash; Figures 1&ndash;3, Tables 1&ndash;3.</li>
+  <li><strong>2024-25 EFA Annual Report</strong> (OSCPE) &mdash; Figures 1&ndash;5, Tables 1&ndash;8 and 11, Appendices B&ndash;D.</li>
+  <li><strong>Appropriation acts and ALC-PEER exhibits</strong> &mdash; the appropriation series, 2023-24 to 2026-27.</li>
+  <li><strong>DESE State Aid Notices; Act 909 of 2025</strong> &mdash; foundation funding rates, used to <em>compute</em> the award.</li>
+  <li><strong>DESE annual home school reports</strong> &mdash; the 1997-98 to 2025-26 series.</li>
+  <li><strong>Ark. Code Ann. &sect;&nbsp;6-18-2505</strong> &mdash; the 90% allocation rule and the fee withholding.</li>
+  <li><strong>DESE EFA &ldquo;Information for Families&rdquo; and FAQ</strong> &mdash; the net-of-fee award amounts.</li>
+</ul>
+
+<h3>Obtained &mdash; released under FOIA, published by a third party</h3>
+<p>Arkansas Advocate, <em>&ldquo;Applications show gaps between Arkansas vouchers and private
+school tuition rates&rdquo;</em>, Antoinette Grajeda,
+<a href="https://arkansasadvocate.com/2026/07/01/applications-show-gaps-between-arkansas-vouchers-and-private-school-tuition-rates/">1 July 2026</a>.
+The article's own sourcing sentence:</p>
+<blockquote><p>Data was collected from Educational Freedom Account program applications provided
+by the Arkansas Department of Education through a state Freedom of Information Act request.</p></blockquote>
+<p>Used for six 2026-27 figures, all badged <em>obtained</em>: average tuition of about $9,800 and
+the school-application counts (176 applied, 164 approved, 2 denied, 10 under review) from the FOIA
+records; and 51,041 applications approved &mdash; 28,096 private school, 22,945 homeschool &mdash;
+attributed to the Department in the same article.</p>
+<p><strong>Deliberately excluded:</strong> the article's &ldquo;nearly 57,000 students applied&rdquo;,
+attributed to a department spokesperson rather than to records. A hedged round number drawn as a
+precise bar would assert a precision the source disclaims, so the 2026-27 funnel row begins at
+<em>approved</em>. The exclusion and its reason are recorded in the data file itself, not only here.</p>
+<p><strong>The as-of date is derived, not stated.</strong> The article says &ldquo;as of
+Friday&rdquo; and published Wednesday 1 July 2026; the preceding Friday was 26 June 2026. It is
+labelled as derived from the publication date wherever it appears.</p>
+
+<h2>The build contract</h2>
+<pre><code>build_efa_json.py     upstream tables      →  data/efa.json
+build_downloads.py    upstream + efa.json  →  data/downloads/*.csv
+build_xlsx.py         data/downloads/*.csv →  the workbook
+build_vintage.py      data/efa.json        →  data/vintage.json   (LAST)
+spot_check.py         re-derives everything and asserts it        (GATE)</code></pre>
+<p><strong>No number reaches the page except through the data file.</strong> Renderers compute
+layout, never content. This is enforced rather than merely intended: the check script scans the
+renderers for data-shaped numeric literals and fails on any that is not an axis tick or a viewBox
+constant.</p>
+<p>That rule exists because of a specific failure. The proof-of-concept version of this page
+carried four 2026-27 figures as literals inside its renderer functions, where they bypassed the
+data layer entirely and no check could see them. They turned out to be real and well-sourced
+&mdash; but the citation had been lost between the research and the artifact, and nothing in the
+artifact could have told you that. They are now data with provenance fields, and the class of
+defect is closed by a test.</p>
+<p>The check script <strong>does not trust the data file</strong>: it reads the source tables,
+re-derives every quantity independently, and compares &mdash; including re-implementing the name
+normalisation rather than importing it, so a bug shared between builder and checker cannot pass.
+Current count: <strong>292 assertions, all passing.</strong></p>
+
+<h2>Derived figures, and what cross-checks them</h2>
+<p><strong>Implied per-school dollars</strong> = a school's participants &times; that year's
+allocated award. Per-school dollars do not exist for 2023-24, so growth in money received cannot
+be read off the reports; this computes it from two published numbers. Cross-checked twice:</p>
+<ol>
+  <li>Appendix B (spring 2025 only) against implied full-year dollars, for the 45 schools with 60
+  or more participants: median ratio <strong>47.6%</strong>, against the 50% the footnote implies.</li>
+  <li>Appendix B's total against the same report's full-year total: $43,185,261 &divide;
+  $84,506,226 = <strong>51.1%</strong>. This needs no reconstruction at all and is the stronger of
+  the two.</li>
+</ol>
+<p><strong>The award series is computed, not transcribed.</strong> Each year is 0.90 &times; the
+prior year's foundation rate, and all four match the published figures exactly ($6,672 / $6,856 /
+$6,994 / $7,346). The chart therefore demonstrates the statute rather than restating it. The
+<em>net</em> amounts ($6,864 and $7,208) are not derivable and are carried as cited constants; no
+net figure was published for 2023-24 or 2024-25, so none is drawn for those years.</p>
+
+<h2>Matching, and why there is no fuzzy matching anywhere</h2>
+<p>Schools appear by name only &mdash; no code, no ID, no address. Matching is <strong>exact on a
+normalised name</strong>: case, punctuation and spacing removed, and the parenthesised city
+stripped. Stripping the city is what makes campuses collapse, so every use of the cross-table key
+reports its collision count:</p>
+<ul>
+  <li>2023-24: 97 rows &rarr; 92 keys (5 collapse, including three St. Joseph Catholic School campuses)</li>
+  <li>2024-25: 126 rows &rarr; 122 keys (4 collapse)</li>
+  <li>68 of the 126 2024-25 rows match a 2023-24 name; <strong>58 do not</strong></li>
+  <li>65 <em>keys</em> match, which is why the growth chart draws 65 lines while the identifier
+  chart counts 68 rows &mdash; three matched rows share a key with another</li>
+</ul>
+<p>No fuzzy matching was attempted anywhere in this project. It is known to mis-match Arkansas
+school names, and an earlier trial produced a documented false match (&ldquo;Saline County
+Christian School&rdquo; &rarr; &ldquo;Clover Community School&rdquo;). The check script asserts
+that no build script imports a fuzzy-matching library.</p>
+
+<h2>Two source defects this build surfaced</h2>
+<ul>
+  <li><strong>The 2023-24 mean share does not reproduce.</strong> Averaging that report's own 97
+  per-school percentages gives <strong>37.9%</strong>; the same report states <strong>39%</strong>.
+  Not an extraction error: the column sums to the report's own 5,548 participants exactly, and an
+  enrolment-weighted mean gives 26.5%, so it is neither. The 2024-25 equivalent <em>does</em>
+  reproduce (47.8% against a stated 48%). It appears as a failing row in the reconciliation table
+  rather than being smoothed over.</li>
+  <li><strong>The 2024-25 report gives two Succeed Scholarship figures</strong> &mdash; $7,617 on
+  p3 and $7,618 on p5. $7,618 is 100% of the prior year's foundation exactly, so p3 is a typo in
+  the source. It is recorded as the source defect it is rather than silently corrected.</li>
+</ul>
+
+<h2>Anomalies carried from the extraction audit</h2>
+<ol>
+  <li><strong>Appendix B does not reconcile to its own printed total, by $27</strong> &mdash; in
+  the source. 1,971 rows sum to $43,185,261 against a printed $43,185,234. The appendix prints
+  whole dollars for cent-level values. Reproduced, not patched.</li>
+  <li><strong>Appendix B covers one semester only.</strong> Provider identities for autumn 2024
+  &ldquo;could not be reliably determined&rdquo;. Every row carries
+  <code>period = spring_2025_only</code>. Never sum it as a year.</li>
+  <li><strong>The two Table 2s cover different, consecutive transitions</strong> &mdash;
+  2023-24&rarr;2024-25 and 2024-25&rarr;2025-26. They must never be differenced. An earlier claim
+  that they contradict each other was <strong>withdrawn</strong>; it was an artefact of stamping
+  one transition label on all 224 rows.</li>
+  <li><strong>No persistent school identifier</strong>, and the population changes between years.
+  58 of 126 have no prior-year name match: an upper bound on genuinely new schools and a lower
+  bound on nothing. The state's own private-school directory cannot fix it &mdash; no stable ID,
+  the school name truncated at 30 characters in the source database, and 15&ndash;23% of EFA
+  schools absent from it entirely.</li>
+  <li><strong>Cross-table matching requires a key that collapses campuses.</strong> See above.</li>
+  <li><strong>Appendix B recipient names are not the same strings as Table 1 school names.</strong>
+  <code>BAPTIST PREP</code> against <code>Baptist Prep</code>. The join is exact-normalised and
+  reports its miss rate: 103 of 122 keys matched, and 9 appendix keys merge two or more printed
+  rows.</li>
+  <li><strong>ATLAS percentages do not sum to 100 on 6 of 14 rows</strong> (99 or 101). The source
+  rounds each level independently. Stored and drawn exactly as printed; rows that do not sum to
+  100 say so on the chart. <strong>Not</strong> normalised.</li>
+  <li><strong>A retention rate above 100% is printed</strong> &mdash; The Huda Academy, 105.3%.
+  Stored as printed, not clipped.</li>
+  <li><strong>The 2024-25 Table 2 contains a Homeschool aggregate row</strong> among its named
+  schools: 126 schools + 1 aggregate = 127. Flagged in the data and excluded from every
+  school-level chart.</li>
+  <li><strong>Per-school dollars for 2023-24 do not exist</strong> in the published record at all.</li>
+</ol>
+
+<h2>Completeness</h2>
+<p>All 27 numbered tables, figures and appendices in both reports are accounted for on the main
+page's completeness audit, which is enumerated programmatically from the documents rather than
+from their contents pages. Eight were missed by the original extraction and found by a later
+audit. Three are deliberately unused: Tables 9 and 10 disaggregate Table 8 by sector and add no
+instrument not already present, and Appendix A is definitional prose.</p>
+
+<h2>Scope</h2>
+<p>One page. No drill-down, no map, no per-school view. If a chart needed data we do not hold, the
+chart was cut rather than the data estimated. The ProPublica and Delta Institute material on this
+programme is journalism, not this project's data, and is not republished here.</p>
+
+<h2>Licence and citation</h2>
+<p>CC BY-NC 4.0. The published CSVs and the workbook carry the same grant.</p>
+<p>Rush, Joel. <em>Arkansas EFA &mdash; the published record.</em> Sidetown Labs, 2026.
+https://arkansas-efa.sidetownlabs.com/.</p>
+
+<footer class="site-footer">
+  <p class="vintage" id="vintage"></p>
+  <p class="companion">Companion sites:
+    <a href="https://arkansas-enrollment.sidetownlabs.com/">Arkansas school enrollment</a> ·
+    <a href="https://arkansas-fiscal.sidetownlabs.com/">Arkansas fiscal mechanics</a></p>
+  <p class="meta-links"><a href="./">The published record</a> ·
+    <a href="https://sidetownlabs.com/">Sidetown Labs</a></p>
+</footer>
+
+</main>
+</div>
+
+<script type="module">
+  import { loadVintage, renderVintage } from "./shared.js";
+  renderVintage(await loadVintage(), "vintage");
+</script>
+<script>
+  window.goatcounter = { path: function(p) { return 'efa' + p } };
+</script>
+<script data-goatcounter="https://sidetownlabs.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
