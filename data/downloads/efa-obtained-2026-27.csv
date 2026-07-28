@@ -1,0 +1,9 @@
+key,label,value,approximate,source_kind,badge,basis,as_of,note
+avg_tuition,average tuition at a participating private school,9800,yes,foia_records,obtained,170 application packets obtained under FOIA,,"The article states “about $9,800”. Rendered as approximate."
+schools_applied,private schools applied to participate in 2026-27,176,no,foia_records,obtained,FOIA'd application records,,
+schools_approved,approved,164,no,foia_records,obtained,FOIA'd application records,,
+schools_denied,denied,2,no,foia_records,obtained,FOIA'd application records,,
+schools_under_review,still under review,10,no,foia_records,obtained,FOIA'd application records,,
+approved_total,applications approved for 2026-27,51041,no,department_statement,reported,attributed to the Department of Education in the same article,2026-06-26,
+approved_private,private school students,28096,no,department_statement,reported,attributed to the Department of Education in the same article,2026-06-26,
+approved_homeschool,homeschool students,22945,no,department_statement,reported,attributed to the Department of Education in the same article,2026-06-26,

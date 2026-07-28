@@ -79,6 +79,10 @@ reconciliation checks and known anomalies: the site's Methodology page.
 
 12 rows. Appropriated and spent amounts by fiscal year, with the as-of date and source document for each -- including the two conflicting 2023-24 totals.
 
+### `efa-obtained-2026-27.csv`
+
+8 rows. The 2026-27 figures that come from the Arkansas Advocate rather than from a state publication, each with its source_kind and the badge this page gives it. Five are from application records released under freedom-of-information law (badged obtained); three are statements the Department made to the reporter (badged reported). The article's hedged 'nearly 57,000 applications' is deliberately not carried — see the site's methodology.
+
 ### `efa-coverage-matrix.csv`
 
 26 rows. What the state publishes, by measure and year — the grid behind the coverage figure. Each cell is published, partial, obtained, conflict or absent. Probes dated in the absence register.

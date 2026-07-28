@@ -85,10 +85,22 @@
      than a weaker rung, and it must not read as the amber "provisional" marker,
      which is a third axis again. Validated against --prelim in both modes:
      ΔE 25.8 protan / 18.5 tritan / 27.0 normal in light, all six palette checks
-     pass. */
+     pass.
+
+     --reported: the fifth provenance badge, added 2026-07-27. A figure the
+     department stated to a journalist, in no state document and in no released
+     record. Deliberately the same hue family as --obtained and deliberately
+     weaker: the two are adjacent claims — neither is a state publication — and
+     `reported` is the lesser of them, a quote rather than a record. ΔE 33.1
+     from --obtained in light and 30.9 in dark: close enough to read as kin,
+     far enough not to be mistaken for it. ΔE ≥ 34 against every other badge
+     token in both modes. Contrast on its own tint 4.93 light / 5.16 dark, both
+     over the 4.5 floor for the 11px pill text. */
   --neutral:      #b4b2ab;
   --obtained:     #6b4fa8;
   --obtained-bg:  rgba(107, 79, 168, 0.12);
+  --reported:     #8d4f76;
+  --reported-bg:  rgba(141, 79, 118, 0.12);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -131,6 +143,8 @@
     --neutral:      #5a5852;
     --obtained:     #9d7fd6;
     --obtained-bg:  rgba(157, 127, 214, 0.17);
+    --reported:     #d98ab8;
+    --reported-bg:  rgba(217, 138, 184, 0.17);
   }
 }
 
@@ -247,25 +261,40 @@ h2 {
 /* ── The badge system ────────────────────────────────────────────────────────
    The one thing this site does that nothing else does for this programme:
    every figure declares what KIND of claim it is before the reader reads the
-   number. Three values, ordinal in how strong a claim they license:
+   number. Five values, ordinal in how strong a claim they license:
 
      published  the state printed this number in a report we can cite
      derived    we computed it from numbers the state printed; the arithmetic
                 is stated and cross-checked on the page
      obtained   state-held records released to a named requester under FOIA and
                 published by someone else — not published by the state
+     reported   the department stated it to a journalist; it is in no state
+                document and in no released record
      absent     the state has not published this, and we checked on a date
 
-   "obtained" is not a fourth concept diluting three. It is the absence
-   register's own `collected, not published` category surfacing in the main
-   body: the register row says the state holds tuition data and will not print
-   it, and the chart shows the number a requester got anyway. The two cross-link
-   on the page deliberately, and the badge is what makes that legible.
+   "obtained" is not a concept diluting the others. It is the absence register's
+   own `collected, not published` category surfacing in the main body: the
+   register row says the state holds tuition data and will not print it, and the
+   chart shows the number a requester got anyway. The two cross-link on the page
+   deliberately, and the badge is what makes that legible.
+
+   "reported" (added 2026-07-27) is the third face of that coin. `obtained` and
+   `collected, not published` are one fact seen from two ends; `reported` is
+   what it looks like when the state answers a reporter instead of a records
+   request. It exists because three 2026-27 approval counts were wearing
+   `obtained` while coming from a spokesperson quote — and because the fact that
+   Arkansas's most current participation figures exist ONLY as a quote to a
+   newspaper is itself a finding about the record, which a footnote would bury.
+
+   The tier list is defined once, in scripts/build_efa_json.py's TIERS block,
+   reaches the page through efa.json, and spot_check.py asserts that README.md,
+   METHODOLOGY.md, methodology.html and index.html all agree with it.
 
    Rendered on the same .verify-badge pill the fiscal site uses, against the
    same --verify-* token pairs, so a reader who has seen that site reads this
    badge as the same object. The text label is mandatory: colour is never the
-   sole channel. `data-verify` = published | derived | obtained | absent. */
+   sole channel. `data-verify` = published | derived | obtained | reported |
+   absent. */
 .verify-badge {
   display: inline-flex; align-items: center; gap: 5px;
   font-size: 11px; font-weight: 600; line-height: 1;
@@ -279,6 +308,8 @@ h2 {
 .verify-badge[data-verify="derived"]   .verify-dot { background: var(--verify-applied); }
 .verify-badge[data-verify="obtained"]  { color: var(--obtained);        background: var(--obtained-bg); }
 .verify-badge[data-verify="obtained"]  .verify-dot { background: var(--obtained); }
+.verify-badge[data-verify="reported"]  { color: var(--reported);        background: var(--reported-bg); }
+.verify-badge[data-verify="reported"]  .verify-dot { background: var(--reported); }
 .verify-badge[data-verify="absent"]    { color: var(--verify-observed); background: var(--verify-observed-bg); }
 .verify-badge[data-verify="absent"]    .verify-dot { background: var(--verify-observed); }
 
@@ -430,6 +461,41 @@ section > p { max-width: 70ch; }
 
 /* SVG primitives. Charts scale by viewBox; wide ones scroll inside .card. */
 .card svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+/* ── Narrow-viewport chart legibility (2026-07-27) ───────────────────────────
+   Every chart is authored at a 900-unit viewBox. Left to scale freely that is
+   fine down to about 900px and catastrophic below it: at a 375px viewport the
+   SVG resolved to 264px, a 0.296x scale, which rendered 11.5px chart type at
+   3.4px. Every axis label, value label and in-chart caption on all 22 charts
+   was unreadable on a phone — measured, not estimated.
+
+   The fix is the pattern the page already uses for wide tables: stop shrinking,
+   start scrolling. Below 900px the chart host becomes its own horizontal scroll
+   container and the SVG holds a floor width, so type stays at a legible scale
+   and the reader pans instead of squinting. No chart loses a mark, no renderer
+   changes, and the page itself still never scrolls horizontally — the overflow
+   is owned by the host, exactly as .table-scroll owns its table's.
+
+   The floor is 760px rather than the full 900: it keeps effective type at
+   ~9.7px at 375px (against 3.4px before) while holding the pan distance to
+   roughly two screen-widths. Restoring the full 900 would buy 1.8px of type
+   for another half-screen of panning, which is the wrong trade on a phone. */
+@media (max-width: 899px) {
+  .card > div[id^="c-"] {
+    overflow-x: auto;
+    overflow-y: hidden;
+    /* Let the scroll edge meet the card edge, so it reads as a pannable
+       surface rather than a clipped one, without shifting the card padding. */
+    margin: 0 -22px;
+    padding: 0 22px;
+    /* Keyboard users must be able to reach the scroll area. */
+    scrollbar-width: thin;
+  }
+  .card > div[id^="c-"] > svg { min-width: 760px; }
+  .card > div[id^="c-"]:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+  /* The legend belongs to the chart but is HTML, and wraps fine on its own. */
+  .card > .legend { margin-bottom: 10px; }
+}
 .gl  { stroke: var(--gridline); stroke-width: 1; }
 .ax  { fill: var(--text-muted); font-size: 11.5px; }
 .lbl { fill: var(--text-secondary); font-size: 12px; }
@@ -498,3 +564,64 @@ nav.toc a:hover { text-decoration: underline; }
 }
 .dl-btn:hover, .dl-btn:focus-visible { border-color: var(--link); }
 .dl-btn .ext { color: var(--text-muted); font-weight: 400; }
+
+/* ══ Page-length pass (2026-07-27) ═══════════════════════════════════════════
+   Three structural changes, no figure altered. The page put ~6,000px of
+   reference apparatus after ~18,000px of evidence, so a reader crossed the
+   whole evidence base before reaching the argument it supports; and the
+   absence register was built for reading when its job is checking — sixteen
+   probes as open prose hide the one thing that matters about them, which is
+   how they distribute across kinds.
+
+   Layout classes only. Nothing here touches the shared token block, which
+   stays byte-identical to the fiscal site's (spot_check.py asserts it). */
+
+/* The findings block — the argument, before the evidence rather than after. */
+.findings { display: grid; gap: 10px; margin: 14px 0 0; }
+.findings > div {
+  background: var(--surface-1); border: 1px solid var(--gridline);
+  border-left: 3px solid var(--link); border-radius: 0 8px 8px 0;
+  padding: 11px 15px; font-size: 14.5px; color: var(--text-secondary); max-width: none;
+}
+.findings strong { color: var(--text-primary); }
+
+/* Pure-receipt sections collapse to their claim. The table is the proof, and
+   proof should be one click away rather than three screens tall. */
+details.receipt {
+  background: var(--surface-1); border: 1px solid var(--gridline);
+  border-radius: 10px; padding: 14px 18px; margin-top: 14px;
+}
+details.receipt > summary {
+  cursor: pointer; font-size: 14.5px; color: var(--text-secondary); list-style: none;
+}
+details.receipt > summary::-webkit-details-marker { display: none; }
+/* The expand affordance. Every collapsed block states what opening it shows and
+   swaps that for "hide" when open, so the control never lies about its state.
+   Both labels are always in the DOM; CSS chooses which is visible. */
+.hint { color: var(--link); font-size: 12.5px; white-space: nowrap; }
+details.receipt > summary .hint { margin-left: 6px; font-size: 13.5px; }
+.hint-open { display: none; }
+details[open] > summary .hint-shut { display: none; }
+details[open] > summary .hint-open { display: inline; }
+details.regrow > summary .hint { margin-left: auto; }
+details.receipt[open] > summary {
+  margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--gridline);
+}
+details.receipt > summary:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; border-radius: 4px; }
+
+/* Register: the count-by-kind chips carry the distribution, which is the
+   finding; each probe collapses to one line beneath them. */
+.reg-summary { display: flex; flex-wrap: wrap; gap: 7px; margin: 0 0 4px; max-width: none; }
+details.regrow { border-bottom: 1px solid var(--gridline); padding: 9px 2px; }
+details.regrow:last-child { border-bottom: 0; }
+details.regrow > summary {
+  cursor: pointer; list-style: none; display: flex; align-items: center; gap: 9px; flex-wrap: wrap;
+}
+details.regrow > summary::-webkit-details-marker { display: none; }
+details.regrow > summary::before {
+  content: "\25B8"; color: var(--text-muted); font-size: 11px;
+  transition: transform .12s; flex: none;
+}
+details.regrow[open] > summary::before { transform: rotate(90deg); }
+details.regrow > summary:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; border-radius: 4px; }
+details.regrow .probe, details.regrow .got { margin-left: 18px; }

@@ -8,7 +8,7 @@
 <link rel="canonical" href="https://arkansas-efa.sidetownlabs.com/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Education Freedom Accounts — the published record, drawn">
-<meta property="og:description" content="Everything Arkansas has published about its school voucher programme, charted. Every figure badged published, derived, obtained or absent.">
+<meta property="og:description" content="Everything Arkansas has published about its school voucher programme, charted. Every figure badged published, derived, obtained, reported or absent.">
 <meta property="og:url" content="https://arkansas-efa.sidetownlabs.com/">
 <meta property="og:image" content="https://arkansas-efa.sidetownlabs.com/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -41,10 +41,12 @@
 
 <nav class="toc" aria-label="Contents">
   <ol>
+    <li><a href="#findings">What this page found</a></li>
     <li><a href="#p1">How big is it?</a></li>
     <li><a href="#p2">Who is in it?</a></li>
     <li><a href="#p3">Where does the money go?</a></li>
     <li><a href="#p4">Which schools?</a></li>
+    <li><a href="#tuition">What a voucher actually covers</a></li>
     <li><a href="#p5">What is not known</a></li>
     <li><a href="#recon">Reconciliation</a></li>
   </ol>
@@ -52,7 +54,7 @@
 
 <section id="howto">
   <h2>How to read this page</h2>
-  <p>Every figure carries one of four badges. The badge is the point: it says what kind of thing
+  <p>Every figure carries one of five badges. The badge is the point: it says what kind of thing
   you are looking at before you read the number.</p>
   <div class="howto">
     <div><span class="verify-badge" data-verify="published"><span class="verify-dot"></span>published</span>
@@ -65,14 +67,49 @@
       <p>State-held records released to a named requester under freedom-of-information law and
       published by someone else &mdash; not published by the state. These are the register's
       &ldquo;collected, not published&rdquo; rows, seen from the other side.</p></div>
+    <div><span class="verify-badge" data-verify="reported"><span class="verify-dot"></span>reported</span>
+      <p>A figure the department stated to a journalist. It appears in no state document and in
+      no released record, so there is nothing to check it against &mdash; only someone's word,
+      accurately attributed.</p></div>
     <div><span class="verify-badge" data-verify="absent"><span class="verify-dot"></span>absent</span>
       <p>Something the state does not publish. Each entry records what was checked, where, and
       what came back &mdash; and, where it is known, who obtained the data anyway.</p></div>
   </div>
+  <div class="note"><p><strong>Why five and not four.</strong> Until 26 July 2026 this page
+  badged three 2026-27 figures <em>obtained</em>. They were not: the Department stated them to a
+  reporter, and no record was released for them. That distinction is the whole point of the
+  badge, so getting it wrong here mattered more than getting it wrong anywhere else. The
+  separate tier is not bookkeeping &mdash; the most current participation figures for a
+  programme with a $309m appropriation exist <em>only</em> as a quote to a newspaper, and that
+  is a fact about the record worth showing rather than burying.</p></div>
   <p class="srcline" style="margin-top:14px">Every number on this page is built from the source
   tables by a script and served from a single data file; none is typed into a chart. The tables
   themselves are published below, in full, as CSV and as one workbook.
   <a href="methodology.html">Method, sources and known anomalies &rarr;</a></p>
+</section>
+
+<section id="findings">
+  <h2>What this page found</h2>
+  <div class="findings">
+    <div><strong>Only 12%</strong> of 2024-25 participants had attended an Arkansas public school
+      the year before.</div>
+    <div><strong>Homeschool families are 45%</strong> of 2026-27 approvals, up from 24% two years
+      earlier &mdash; and they spend 39% of their money on supplies, against private-school
+      families' 97% on tuition. Two programmes wearing one name.</div>
+    <div><strong>Best Buy is the 4th-largest recipient</strong> of voucher money in the state.
+      1,971 named recipients share $43.2m; the median one received $483.</div>
+    <div><strong>58 of 126 schools</strong> cannot be matched to the prior year by name. There is
+      no school identifier in the published record, and the state's own private-school directory
+      has none either.</div>
+    <div><strong><span data-count="holes">16</span> verified holes.</strong> Race, household
+      income and grade level have never been collected in any year.
+      <span data-count="withheld">5</span> further things the state holds and does not publish
+      &mdash; <span data-count="obtained">2</span> of which someone else has obtained anyway.
+      <a href="#ns">The register</a> records each with the probe that established it and the date
+      it was checked.</div>
+  </div>
+  <p class="srcline">Every figure below carries a badge saying what kind of claim it is. The
+  tables behind every chart are published at the foot of the page as CSV.</p>
 </section>
 
 <!-- ══ PART ONE ══════════════════════════════════════════════════════════ -->
@@ -90,15 +127,24 @@ a billion.</p></div>
 </section>
 
 <section id="funnel">
-  <h2>Applications, approvals, active accounts<span class="verify-badge" data-verify="published"><span class="verify-dot"></span>published</span></h2>
+  <h2>Applications, approvals, active accounts</h2>
   <p>The gap between approved and active is small; the gap between applied and approved is not.
   Nothing published explains why an application is denied.</p>
   <div class="card"><div id="c-funnel"></div></div>
-  <p class="srcline">2023-24 and 2024-25 annual reports; 2025-26 from the 2024-25 report's Outlook.
-  Active-participant counts exist only for the two closed years. The 2026-27 row begins at
-  <em>approved</em> deliberately: the only figure for applications received that year is a
-  department spokesperson's &ldquo;nearly 57,000&rdquo;, and a hedged round number drawn as a
-  precise bar would assert a precision the source disclaims.</p>
+  <p class="srcline"><strong>This chart mixes tiers, so each row carries its own</strong> rather
+  than the section carrying one for all four. 2023-24 and 2024-25 are published annual-report
+  figures. 2025-26 is published too, but in the 2024-25 report's forward-looking Outlook
+  paragraph rather than as a result. 2026-27 is <em>reported</em>: the Department gave the
+  number to the Arkansas Advocate, and it appears in no state document.
+  Active-participant counts exist only for the two closed years.</p>
+  <div class="note"><p><strong>Why the 2026-27 row starts at <em>approved</em>.</strong> The
+  only figure for applications received that year is &ldquo;nearly 57,000&rdquo;, and it is not
+  drawn. That is <em>not</em> because of where it came from &mdash; it came from the same
+  spokesperson, in the same breath, as the 51,041 approvals this page does draw. It is because
+  of how it was said. &ldquo;Nearly 57,000&rdquo; is hedged by the speaker; 51,041 is exact.
+  Drawing a round number the source itself qualified as a precise bar would assert a precision
+  the source disclaims. Both figures are the same tier and only one is plottable, so the other
+  is quoted in words here instead.</p></div>
 </section>
 
 <!-- ══ PART TWO ══════════════════════════════════════════════════════════ -->
@@ -107,7 +153,7 @@ a billion.</p></div>
 has been reported.</p></div>
 
 <section id="sector">
-  <h2>The sector flip<span class="verify-badge" data-verify="obtained"><span class="verify-dot"></span>obtained</span></h2>
+  <h2>The sector flip<span class="verify-badge" data-verify="reported"><span class="verify-dot"></span>reported</span></h2>
   <p>Homeschooling was not an allowable use of the funds in year one. Two years after it became
   one, homeschool families are nearly half the programme. This is the largest single change in
   its composition and it has gone almost entirely unremarked.</p>
@@ -118,16 +164,18 @@ has been reported.</p></div>
     </div>
     <div id="c-sector"></div>
   </div>
-  <p class="srcline">2024-25 from the annual report. <strong>2026-27 approved applications are
-  obtained, not published:</strong> the Department released them to the Arkansas Advocate, which
-  reported them on 1 July 2026 (Antoinette Grajeda, &ldquo;Applications show gaps between Arkansas
-  vouchers and private school tuition rates&rdquo;) &mdash; <em>&ldquo;Data was collected from
-  Educational Freedom Account program applications provided by the Arkansas Department of
-  Education through a state Freedom of Information Act request.&rdquo;</em> The counts are stated
-  as of 26&nbsp;June&nbsp;2026, a date derived from the article's &ldquo;as of Friday&rdquo; and
-  its publication date rather than stated outright. 2023-24 is omitted: homeschool was not an
-  eligible use that year. See <a href="#ns">the absence register</a> for why no state publication
-  carries these.</p>
+  <p class="srcline">2024-25 from the annual report. <strong>The 2026-27 split is reported, not
+  published and not obtained:</strong> an Arkansas Department of Education spokesperson gave the
+  approval counts to the Arkansas Advocate, which printed them on 1 July 2026 (Antoinette
+  Grajeda, &ldquo;Applications show gaps between Arkansas vouchers and private school tuition
+  rates&rdquo;). No state document contains them and no record was released for them &mdash;
+  the article's separate freedom-of-information request covered the
+  <a href="#tuition">tuition and school-application material</a> further down this page, not
+  these counts, and conflating the two would claim a receipt that does not exist. The counts are
+  stated as of 26&nbsp;June&nbsp;2026, a date derived from the article's &ldquo;as of
+  Friday&rdquo; and its publication date rather than stated outright. 2023-24 is omitted:
+  homeschool was not an eligible use that year. See <a href="#ns">the absence register</a> for
+  why no state publication carries these.</p>
 </section>
 
 <section id="prior">
@@ -213,8 +261,20 @@ very long tail.</p></div>
   95,385. Nearly the same number of transactions for a fifth of the money &mdash; an average of
   $171 against $733. That cohort went from 24% of the programme to nearly half in two years,
   which is the arithmetic behind the vendor backlog reported in mid-2026.</p></div>
-  <p class="srcline">2024-25 report Tables 4 and 5. Both reconcile exactly to their stated totals
-  in dollars and in transaction counts. <span class="pill exact">reconciles</span></p>
+  <p class="srcline">2024-25 report Tables 4 and 5. Each reconciles exactly to its own stated
+  totals, in dollars and in transaction counts. <span class="pill exact">reconciles</span></p>
+  <div class="note"><p><strong>But they do not add up to the report's own total.</strong> This is
+  the same 2024-25 spending split two ways, so Tables 4 and 5 should sum to Table 3 &mdash; the
+  fourteen-category total four sections above. They do not. In dollars they come to
+  <strong>$84,524,869</strong> against Table 3's printed <strong>$84,506,226</strong>: $18,643
+  too much. In transactions they come to <strong>180,573</strong> against
+  <strong>180,602</strong>: 29 too few. The two gaps run in opposite directions, so a single
+  block of omitted rows does not explain them, and nothing in either report does either &mdash;
+  Appendix A defines the expenditure categories and states no difference in scope between the
+  all-student table and the by-sector ones. Reported as found, and left unreconciled: adjusting
+  either side to close it would be inventing a reason the source does not give. Both rows are in
+  <a href="#recon">the reconciliation table</a>, failing.
+  <span class="pill prelim">does not reconcile</span></p></div>
 </section>
 
 <section id="explosion">
@@ -372,7 +432,7 @@ which school you are looking at.</p></div>
 </section>
 
 <section id="award">
-  <h2>The 90% rule, and the gap it leaves families<span class="verify-badge" data-verify="published"><span class="verify-dot"></span>published</span></h2>
+  <h2>The 90% rule, and the gap it leaves families<span class="verify-badge" data-verify="derived"><span class="verify-dot"></span>derived</span></h2>
   <p>An account is worth 90% of what the state spent per public school student the year before.
   That holds to the cent in all four years. A payment-platform fee is then withheld before the
   money reaches the family &mdash; the dashed line.</p>
@@ -383,9 +443,13 @@ which school you are looking at.</p></div>
     </div>
     <div id="c-award"></div>
   </div>
-  <p class="srcline">Foundation funding from the DESE State Aid Notices and Act 909 of 2025; the
-  allocated amounts on this chart are <strong>computed</strong> as 90% of the prior year's
-  foundation rate, not transcribed, and all four match the published figures exactly.
+  <p class="srcline"><strong>Derived, and this is why:</strong> the foundation rates are
+  published &mdash; DESE State Aid Notices and Act 909 of 2025 &mdash; but the allocated amounts
+  drawn here are <strong>computed</strong> as 90% of the prior year's rate rather than
+  transcribed, which is arithmetic on published figures, not reproduction of them. The
+  cross-check the badge requires is the chart's own point: all four computed years match the
+  amounts the state published, to the cent. That is what makes this chart demonstrate the
+  statute instead of restating it.
   <strong>Two figures circulate for each year and both are correct</strong>: the <em>allocated</em>
   amount (90% of the prior year's foundation funding, per Ark. Code Ann.
   &sect;&nbsp;6-18-2505(a)(1)) and the <em>net</em> amount reaching the family after the
@@ -394,6 +458,38 @@ which school you are looking at.</p></div>
   figure was published for 2023-24 or 2024-25, so none is drawn for those years. The withholding
   runs 1.85&ndash;1.88% across all three published pairs.
   <span class="pill exact">reconciles</span></p>
+</section>
+
+<section id="tuition">
+  <h2>What a voucher actually covers<span class="verify-badge" data-verify="obtained"><span class="verify-dot"></span>obtained</span></h2>
+  <p>The state collects tuition on every school's application form and publishes none of it.
+  The Arkansas Advocate requested those applications under freedom-of-information law and got
+  them. At the average participating school, tuition runs <strong>about $9,800</strong> against
+  a 2026-27 account worth $7,346 &mdash; so the account covers roughly three-quarters of a
+  year, and the family covers the rest.</p>
+  <div class="card"><div id="c-tuition"></div></div>
+  <p class="srcline">Arkansas Advocate, 1 July 2026 (Antoinette Grajeda), from 170 application
+  packets released by the Department under a state Freedom of Information Act request:
+  <em>&ldquo;Data was collected from Educational Freedom Account program applications provided
+  by the Arkansas Department of Education through a state Freedom of Information Act
+  request.&rdquo;</em> This is the request that sentence describes &mdash; it does not cover the
+  2026-27 approval counts elsewhere on this page, which are
+  <a href="#howto">reported</a>, not obtained. The tuition figure is stated by the source as
+  &ldquo;about $9,800&rdquo; and is drawn as an approximate band for that reason. The award
+  amounts it is compared against are the state's own. See
+  <a href="#ns">the absence register</a>: tuition is a &ldquo;collected, not published&rdquo;
+  row, and this chart is that row seen from the other side.</p>
+  <div class="downloads" data-downloads="efa-obtained-2026-27.csv"></div>
+</section>
+
+<section id="schools2627">
+  <h2>Which schools wanted in<span class="verify-badge" data-verify="obtained"><span class="verify-dot"></span>obtained</span></h2>
+  <p>The same records show how the state handled the schools themselves. 176 private schools
+  applied to take part in 2026-27; 164 were approved and 2 were denied.</p>
+  <div class="card"><div id="c-schools-2627"></div></div>
+  <p class="srcline">Same source and same request as above. No state publication carries these
+  counts for 2026-27 &mdash; the coverage matrix marks the row obtained for that reason. As with
+  student applications, nothing published explains either denial.</p>
 </section>
 
 <section id="hs">
@@ -447,9 +543,11 @@ not quite, be compared with a public school.</p></div>
 
 <!-- ══ PART FIVE ═════════════════════════════════════════════════════════ -->
 <div class="part" id="p5"><p class="n">Part five</p><h2>What is not known</h2>
-<p>Seventeen holes in the published record, each with the check that established it. Some are
-things the state does not collect. Some are things it holds and does not publish &mdash; and for
-those, someone else has already obtained them.</p></div>
+<p>The register below holds <span data-count="holes">16</span> holes in the published record, each
+with the check that established it. Some are things the state does not collect. Some are things it
+holds and does not publish &mdash; and for those, someone else has already obtained them. One row
+is not a hole at all: it is badged <em>published</em>, and it is in the register because this
+project's own QA twice said the data did not exist.</p></div>
 
 <section id="coverage">
   <h2>What exists, by year<span class="verify-badge" data-verify="absent"><span class="verify-dot"></span>absent</span></h2>
@@ -481,7 +579,11 @@ those, someone else has already obtained them.</p></div>
   <p>Every numbered table, figure and appendix in both reports, and whether this page uses it.
   This is how the claim &ldquo;nothing has been missed&rdquo; is made checkable rather than
   asserted.</p>
-  <div class="card"><div class="table-scroll"><table id="c-audit"></table></div></div>
+  <details class="receipt">
+    <summary><span id="audit-claim">27 objects in the two reports &mdash; all accounted for.</span>
+      <span class="hint hint-shut">open the audit &rarr;</span><span class="hint hint-open">hide the audit</span></summary>
+    <div class="table-scroll"><table id="c-audit"></table></div>
+  </details>
   <p class="srcline">Enumerated programmatically from the documents themselves, not from their
   contents pages. Objects marked &ldquo;found in sweep&rdquo; were missed by the first pass and
   located by a later completeness audit &mdash; including both sector spending tables and the
@@ -493,7 +595,11 @@ those, someone else has already obtained them.</p></div>
   <h2>Reconciliation</h2>
   <p>Every figure on this page that has a stated total in its source has been checked against it.
   The checks that fail are printed with the ones that pass.</p>
-  <div class="card"><div class="table-scroll"><table id="c-recon"></table></div></div>
+  <details class="receipt">
+    <summary><span id="recon-claim">21 checks: 17 reconcile exactly.</span>
+      <span class="hint hint-shut">open the reconciliation &rarr;</span><span class="hint hint-open">hide the reconciliation</span></summary>
+    <div class="table-scroll"><table id="c-recon"></table></div>
+  </details>
 </section>
 
 <section id="data">
@@ -510,8 +616,9 @@ those, someone else has already obtained them.</p></div>
 
 <footer class="site-footer">
   <p>Built from the Arkansas Department of Education's own published reports and appropriation
-  acts, with the two 2026-27 figures noted above obtained under FOIA by the Arkansas Advocate.
-  Nothing here is modelled.</p>
+  acts. Five 2026-27 figures come from application records the Arkansas Advocate obtained under
+  freedom-of-information law, and three come from what the Department told the same reporter;
+  each is badged for which. Nothing here is modelled.</p>
   <p class="vintage" id="vintage"></p>
   <p class="companion">Companion sites:
     <a href="https://arkansas-enrollment.sidetownlabs.com/">Arkansas school enrollment</a> ·

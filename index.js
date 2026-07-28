@@ -20,6 +20,7 @@ const FILES = [
   ["efa-participation-by-school.csv", "Participation by school"],
   ["efa-statewide-summary.csv", "Statewide summary"],
   ["efa-appropriations.csv", "Appropriations"],
+  ["efa-obtained-2026-27.csv", "2026-27, obtained and reported"],
   ["efa-coverage-matrix.csv", "Coverage matrix"],
   ["efa-absence-register.csv", "Absence register"],
   ["arkansas-efa-published-record.xlsx", "Everything, one workbook"],
@@ -65,6 +66,8 @@ async function main() {
   C.assessment(D, "c-assess");
   C.retention(D, "c-ret");
   C.award(D, "c-award");
+  C.obtainedTuition(D, "c-tuition");
+  C.obtainedSchools(D, "c-schools-2627");
   C.homeschool(D, "c-hs");
   C.instruments(D, "c-instruments");
   C.atlas(D, "c-atlas");
@@ -73,7 +76,70 @@ async function main() {
   C.completeness(D, "c-audit");
   C.reconciliation(D, "c-recon");
 
+  fillDerivedCounts(D);
+  wireChartScroll();
   renderVintage(await loadVintage(), "vintage");
+}
+
+/* Below 900px each chart host becomes a horizontal scroll container (see the
+ * narrow-viewport block in app.css), because shrinking a 900-unit viewBox onto
+ * a phone rendered the type at 3.4px. A scrollable region has to be reachable
+ * by keyboard, so the host takes a tabindex — but only while it actually
+ * scrolls. Adding 22 permanent tab stops a desktop reader can do nothing with
+ * would be its own accessibility defect, so this follows the same media query
+ * the stylesheet uses and keeps the two in step. */
+function wireChartScroll() {
+  const mq = window.matchMedia("(max-width: 899px)");
+  const hosts = document.querySelectorAll('.card > div[id^="c-"]');
+  const apply = () => hosts.forEach(h => {
+    // Only the hosts that actually overflow. The absence register is an HTML
+    // host matching the same selector and it reflows rather than scrolling, so
+    // giving it a tab stop would be a stop that goes nowhere.
+    const scrolls = mq.matches && h.scrollWidth > h.clientWidth + 1;
+    if (scrolls) {
+      h.setAttribute("tabindex", "0");
+      h.setAttribute("role", "region");
+      const t = h.querySelector("svg > title");
+      if (t) h.setAttribute("aria-label", t.textContent + " (scrolls horizontally)");
+    } else {
+      h.removeAttribute("tabindex");
+      h.removeAttribute("role");
+      h.removeAttribute("aria-label");
+    }
+  });
+  apply();
+  mq.addEventListener("change", apply);
+}
+
+/* Counts that appear as prose rather than inside a chart: the findings block at
+ * the top and the two disclosure summaries at the foot. Every one is read from
+ * efa.json here rather than typed into the markup — a hardcoded "15 checks" is
+ * a number that goes stale silently, which is the exact failure this page
+ * exists to criticise. The static values in index.html are correct fallbacks
+ * for a module failure, not a second source of truth. */
+function fillDerivedCounts(D) {
+  const c = C.registerCounts(D);
+  const set = (sel, v) => document.querySelectorAll(sel).forEach(n => { n.textContent = v; });
+  set('[data-count="holes"]', c.holes);
+  set('[data-count="withheld"]', c.withheld);
+  set('[data-count="obtained"]', c.obtained);
+
+  const audit = document.getElementById("audit-claim");
+  if (audit) {
+    const sweep = D.completeness.filter(r => r.status === "found in sweep").length;
+    audit.textContent =
+      `${D.completeness.length} objects in the two reports — all accounted for. ` +
+      `${sweep} were missed by the first pass and found by a later sweep.`;
+  }
+
+  const recon = document.getElementById("recon-claim");
+  if (recon) {
+    const total = D.reconciliation.length;
+    const exact = D.reconciliation.filter(r => r.verdict === "reconciles").length;
+    recon.textContent =
+      `${total} checks: ${exact} reconcile exactly, ${total - exact} are recorded as found ` +
+      `rather than patched.`;
+  }
 }
 
 wireDownloads();

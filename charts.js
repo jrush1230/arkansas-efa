@@ -13,18 +13,34 @@ import { el, svg, text, hover, css, money, dollars, num, titleCase, truncate, ba
 
 const W = 900;   // every chart's viewBox width; height varies
 
+/* Badge tier -> colour token, so a tier drawn inside an SVG reads as the same
+ * object as the HTML .verify-badge pill. Names only; the values live in
+ * app.css and the tier list itself lives in build_efa_json.py's TIERS. */
+const TIER_TOKEN = {
+  published: "--verify-exact",
+  derived: "--verify-applied",
+  obtained: "--obtained",
+  reported: "--reported",
+  absent: "--verify-observed",
+};
+
 /* ── Part one: how big is it? ───────────────────────────────────────────── */
 
 export function kpis(D, hostId) {
+  const fig = Object.fromEntries(D.obtained_2026_27.figures.map(f => [f.key, f]));
   const ob = Object.fromEntries(D.obtained_2026_27.figures.map(f => [f.key, f.value]));
   const s35 = D.state_summary["35"];
   const a36 = D.award.by_fy["36"];
   const hsShare = ob.approved_homeschool / ob.approved_total * 100;
 
-  const asOf = D.obtained_2026_27.figures.find(f => f.key === "approved_total").as_of;
+  // CORRECTION: the badge is read from the figure's own `badge` field, which
+  // build_efa_json.py resolves from source_kind. It used to be typed here, and
+  // it was typed wrong: these three counts are a department spokesperson's
+  // statement, not records released under FOIA, so they are `reported`.
+  const asOf = fig.approved_total.as_of;
   const cards = [
     [num(ob.approved_total), "applications approved",
-     `2026-27, as of ${longDate(asOf)}`, "obtained"],
+     `2026-27, as of ${longDate(asOf)}`, fig.approved_total.badge],
     [money(D.derived.appropriated_36_with_supplement), "appropriated",
      "2025-26, original act plus supplemental", "derived"],
     [num(D.recipients.n), "named recipients of funds",
@@ -32,7 +48,8 @@ export function kpis(D, hostId) {
     [s35.pct_prior_public_school + "%", "had attended a public school",
      "2024-25, the year before joining", "published"],
     [Math.round(hsShare) + "%", "are home-schooled",
-     `2026-27 approvals; ${s35.pct_sector_homeschool}% two years earlier`, "obtained"],
+     `2026-27 approvals; ${s35.pct_sector_homeschool}% two years earlier`,
+     fig.approved_homeschool.badge],
     [dollars(a36.allocated), "allocated per account",
      `2025-26; ${dollars(a36.net)} reaches the family`, "published"],
   ];
@@ -49,13 +66,21 @@ export function funnel(D, hostId) {
   // "applied" bar at 57,000, which the source gives only as a spokesperson's
   // "nearly 57,000" — a hedged round number. Drawing it precisely would assert
   // a precision the source disclaims.
+  // CORRECTION: the tier is per row, not per section. Three of these four years
+  // are published; 2025-26 is the prior report's forward-looking Outlook and
+  // 2026-27 is a department statement to a reporter. A single section badge
+  // told the reader all four bars were published, which is false for half of
+  // them, so each row now carries its own tier and the section badge is gone.
+  const badge37 = D.obtained_2026_27.figures.find(f => f.key === "approved_total").badge;
   const rows = [
     { y: "2023-24", a: S["34"].total_applicants, ap: S["34"].total_approved_applicants,
-      ac: S["34"].total_active_participants },
+      ac: S["34"].total_active_participants, tier: "published" },
     { y: "2024-25", a: S["35"].total_applicants, ap: S["35"].total_approved_applicants,
-      ac: S["35"].total_active_participants },
-    { y: "2025-26", a: null, ap: D.derived.fy36_approved, ac: null, tag: "outlook" },
-    { y: "2026-27", a: null, ap: ob.approved_total, ac: null, tag: "obtained" },
+      ac: S["35"].total_active_participants, tier: "published" },
+    { y: "2025-26", a: null, ap: D.derived.fy36_approved, ac: null,
+      tag: "outlook", tier: "published" },
+    { y: "2026-27", a: null, ap: ob.approved_total, ac: null,
+      tag: "stated to a reporter", tier: badge37 },
   ];
   const RH = 62, PAD = 96, H = rows.length * RH + 34;
   const max = Math.max(...rows.flatMap(r => [r.a, r.ap, r.ac].filter(v => v != null)));
@@ -73,7 +98,12 @@ export function funnel(D, hostId) {
         text(s, PAD + bw + 8, y + 4.5, num(v), "val");
         text(s, PAD + bw + 8 + String(num(v)).length * 7.6 + 6, y + 4.5, nm.toLowerCase(), "ax");
       });
-    if (r.tag) text(s, 0, y0 + 34, r.tag, "ax");
+    // Per-row tier, in the label gutter beneath the year. Colour follows the
+    // badge token so it reads as the same object as the HTML pills; the word is
+    // always present, because colour is never the sole channel.
+    text(s, 0, y0 + 34, r.tier, "ax")
+      .setAttribute("fill", css(TIER_TOKEN[r.tier] || "--text-muted"));
+    if (r.tag) text(s, 0, y0 + 46, r.tag, "ax");
   });
 }
 
@@ -339,7 +369,12 @@ export function concentration(D, hostId, summaryId) {
 }
 
 export function topRecipients(D, hostId) {
-  const t = D.recipients.top, RH = 25, PAD = 310, H = t.length * RH + 26;
+  // CORRECTION: the caption sat at H-4 with a middle baseline, which put its
+  // bottom edge 1.9px outside the viewBox and clipped the descenders — the same
+  // defect fixed on the award chart at 19d5f37. Growing H alone does not fix it
+  // (the caption is positioned FROM H and simply moves down with it); the
+  // offset has to grow too. +34 with the caption at H-14 leaves 8px of margin.
+  const t = D.recipients.top, RH = 25, PAD = 310, H = t.length * RH + 34;
   const s = svg(hostId, W, H, "The twenty largest recipients of funds");
   const max = t[0].amount;
   const RETAIL = ["BEST BUY", "AMAZON", "LAKESHORE", "OFFICE DEPOT", "STAPLES"];
@@ -352,7 +387,7 @@ export function topRecipients(D, hostId) {
       `<b>${r.name}</b><br>${dollars(r.amount)}`);
     text(s, PAD + bw + 9, y + 8, dollars(r.amount), "val");
   });
-  text(s, PAD, H - 4, "Orange marks a national retailer rather than a school or education provider.", "ax");
+  text(s, PAD, H - 14, "Orange marks a national retailer rather than a school or education provider.", "ax");
 }
 
 /* ── Part four: which schools? ──────────────────────────────────────────── */
@@ -546,8 +581,8 @@ export function retention(D, hostId) {
 
 export function award(D, hostId) {
   const rows = ["34", "35", "36", "37"].map(k => D.award.by_fy[k]);
-  const H = 260, PADL = 70, s = svg(hostId, W, H, "The 90% rule: foundation funding and the voucher account value");
-  const max = 10500, y = v => H - 52 - (v / max) * (H - 84);
+  const H = 276, PADL = 70, s = svg(hostId, W, H, "The 90% rule: foundation funding and the voucher account value");
+  const max = 10500, y = v => H - 68 - (v / max) * (H - 100);   // H grew by 16 for a 2-line caption; plot box unchanged
   [0, 2500, 5000, 7500, 10000].forEach(v => {
     el("line", { x1: PADL, y1: y(v), x2: W - 30, y2: y(v), class: "gl" }, s);
     text(s, PADL - 10, y(v), "$" + num(v), "ax", "end");
@@ -571,10 +606,113 @@ export function award(D, hostId) {
       stroke: css("--page-plane"), "stroke-width": 2, "stroke-dasharray": "3 3" }, s);
     text(s, x0 + bw * 0.34, y(r.foundation_prior_year) - 11, dollars(r.foundation_prior_year), "ax", "middle");
     text(s, x0 + bw * 0.34 + 3 + bw * 0.17, y(r.allocated) - 11, dollars(r.allocated), "val", "middle");
-    text(s, x0 + bw * 0.34, H - 30, r.school_year, "ax", "middle");
+    text(s, x0 + bw * 0.34, H - 46, r.school_year, "ax", "middle");
   });
-  text(s, PADL, H - 10,
-    "Every year is exactly 90% of the prior year's foundation funding. Dashed line = net to the family after the payment-platform fee, where one is published.", "ax");
+  text(s, PADL, H - 22,
+    "Every year is exactly 90% of the prior year's foundation funding.", "ax");
+  text(s, PADL, H - 8,
+    "Dashed line = net to the family after the payment-platform fee, where one is published.", "ax");
+}
+
+/** The five figures that genuinely came from the released records: average
+ *  tuition, and the school-application outcome counts. These were in the data
+ *  from the first build and drawn nowhere, while three department statements
+ *  wore the badge they had earned. Added 2026-07-27.
+ *
+ *  The tuition figure is approximate — the article says "about $9,800" — and is
+ *  drawn as a band rather than a bar edge, because plotting a hedged number as
+ *  a precise mark is the same error as plotting "nearly 57,000". */
+export function obtainedTuition(D, hostId) {
+  const fig = Object.fromEntries(D.obtained_2026_27.figures.map(f => [f.key, f]));
+  const a37 = D.award.by_fy["37"];
+  const tuition = fig.avg_tuition.value;
+  // H carries three caption lines below the plot; the lines start at x=0 rather
+  // than at PADL because at PADL they run past the 900-unit viewBox and clip.
+  const H = 214, PADL = 210, s = svg(hostId, W, H,
+    "Average tuition at a participating private school against the 2026-27 voucher");
+  const max = 11000, x = v => PADL + (v / max) * (W - PADL - 150);
+
+  const bars = [
+    ["Average tuition charged", tuition, css("--obtained"), true,
+     `${fig.avg_tuition.note} Drawn as an approximate band, not a precise edge.`],
+    ["Allocated per account", a37.allocated, css("--cat-1"), false,
+     `${dollars(a37.allocated)} — 90% of the prior year's foundation funding.`],
+    ["Net reaching the family", a37.net, css("--neutral"), false,
+     `${dollars(a37.net)} after the payment-platform fee.`],
+  ];
+  bars.forEach(([nm, v, col, approx, tip], i) => {
+    const y = 30 + i * 40, bw = x(v) - PADL;
+    text(s, PADL - 12, y + 10, nm, "lbl", "end");
+    hover(el("rect", { x: PADL, y, width: Math.max(bw, 2), height: 20, rx: 4, fill: col,
+      "fill-opacity": approx ? .55 : 1 }, s), `<b>${nm}</b><br>${tip}`);
+    if (approx) {
+      // A soft right edge: the value is hedged, so the bar should not end in a
+      // hard line. Drawn as a hatched over-run rather than a gradient so it
+      // survives a monochrome print.
+      for (let k = 0; k < 5; k++)
+        el("line", { x1: PADL + bw - 10 + k * 5, y1: y, x2: PADL + bw - 18 + k * 5, y2: y + 20,
+          stroke: css("--obtained"), "stroke-width": 1, "stroke-opacity": .5 }, s);
+    }
+    text(s, PADL + bw + 10, y + 10, (approx ? "about " : "") + dollars(v), "val");
+  });
+
+  // The gap is the finding. Bracket it between the tuition band and the award.
+  const gy = 30, gx0 = x(a37.allocated), gx1 = x(tuition);
+  el("line", { x1: gx0, y1: gy - 12, x2: gx1, y2: gy - 12, stroke: css("--cat-2"),
+    "stroke-width": 1.5 }, s);
+  [gx0, gx1].forEach(gx => el("line", { x1: gx, y1: gy - 16, x2: gx, y2: gy - 8,
+    stroke: css("--cat-2"), "stroke-width": 1.5 }, s));
+  text(s, (gx0 + gx1) / 2, gy - 22, dollars(D.derived.tuition_gap_vs_allocated_37) + " gap",
+    "val", "middle").setAttribute("fill", css("--cat-2"));
+
+  text(s, 0, H - 40,
+    `The gap a family covers itself: ${dollars(D.derived.tuition_gap_vs_allocated_37)} against ` +
+    `the allocated award, or ${dollars(D.derived.tuition_gap_vs_net_37)} against the net`, "ax");
+  text(s, 0, H - 26,
+    `amount that actually reaches the account — which is the ` +
+    `“${D.derived.tuition_gap_as_reported}” the source article reports,`, "ax");
+  text(s, 0, H - 12,
+    "reproduced here from its own figures rather than quoted.", "ax");
+}
+
+/** Outcome of the 2026-27 school applications: 176 applied, 164 approved,
+ *  2 denied, 10 under review. All four from the released records. */
+export function obtainedSchools(D, hostId) {
+  const f = Object.fromEntries(D.obtained_2026_27.figures.map(x => [x.key, x.value]));
+  const H = 132, PADL = 210, s = svg(hostId, W, H,
+    "Private schools applying to participate in 2026-27, and the outcome");
+  const total = f.schools_applied, w = W - PADL - 150;
+  text(s, PADL - 12, 26, "Applied to participate", "lbl", "end");
+  hover(el("rect", { x: PADL, y: 16, width: w, height: 20, rx: 4, fill: css("--neutral") }, s),
+    `<b>Applied</b><br>${total} private schools applied to participate in 2026-27`);
+  text(s, PADL + w + 10, 26, num(total), "val");
+
+  let cx = PADL;
+  const parts = [
+    ["Approved", f.schools_approved, css("--obtained")],
+    ["Still under review", f.schools_under_review, css("--prelim")],
+    ["Denied", f.schools_denied, css("--cat-2")],
+  ];
+  parts.forEach(([nm, v, col]) => {
+    const bw = v / total * w;
+    hover(el("rect", { x: cx, y: 56, width: Math.max(bw - 1.5, 1.5), height: 20, rx: 4,
+      fill: col }, s),
+      `<b>${nm}</b><br>${v} of ${total} — ${(v / total * 100).toFixed(1)}%`);
+    cx += bw;
+  });
+  text(s, PADL - 12, 66, "Outcome", "lbl", "end");
+  // The three counts are spelled out in the legend directly below; repeating
+  // them at the bar's right edge ran 96px past the viewBox and clipped.
+  text(s, PADL + w + 10, 66, num(f.schools_approved) + " approved", "val");
+
+  let lx = PADL;
+  parts.forEach(([nm, v, col]) => {
+    el("rect", { x: lx, y: 92, width: 11, height: 11, rx: 3, fill: col }, s);
+    text(s, lx + 17, 98, `${nm} — ${v}`, "ax");
+    lx += (nm.length + String(v).length) * 6.3 + 42;
+  });
+  text(s, PADL, H - 8,
+    "Two denials in 176 applications. Nothing published explains either one.", "ax");
 }
 
 export function homeschool(D, hostId) {
@@ -710,26 +848,72 @@ export function coverage(D, hostId) {
   });
 }
 
-export function register(D, hostId) {
-  // Colour follows the claim: "collected, not published" is the category the
-  // obtained badge surfaces in the main body, so it wears the obtained token.
-  const KIND = {
-    "never collected": ["--verify-observed", "--verify-observed-bg"],
-    "never published": ["--verify-observed", "--verify-observed-bg"],
-    "collected, not published": ["--obtained", "--obtained-bg"],
-    "published once, then dropped": ["--prelim", "--prelim-bg"],
-    "published but broken": ["--prelim", "--prelim-bg"],
-    "not yet published": ["--prelim", "--prelim-bg"],
-    "published": ["--verify-exact", "--verify-exact-bg"],
+// Colour follows the claim: "collected, not published" is the category the
+// obtained badge surfaces in the main body, so it wears the obtained token.
+// Declaration order is also display order for the summary chips: the two
+// "the state never had it" kinds, then the withheld kind, then the three
+// "printed once / partly / not yet" kinds, then the one published row.
+const REGISTER_KIND = {
+  "never collected": ["--verify-observed", "--verify-observed-bg"],
+  "never published": ["--verify-observed", "--verify-observed-bg"],
+  "collected, not published": ["--obtained", "--obtained-bg"],
+  "published once, then dropped": ["--prelim", "--prelim-bg"],
+  "published but broken": ["--prelim", "--prelim-bg"],
+  "not yet published": ["--prelim", "--prelim-bg"],
+  "published": ["--verify-exact", "--verify-exact-bg"],
+};
+
+/** Counts the register groups into. Exported so the findings block at the top
+ *  of the page states the same numbers this section draws, from one source. */
+export function registerCounts(D) {
+  const byKind = {};
+  D.register.forEach(r => { byKind[r.kind] = (byKind[r.kind] || 0) + 1; });
+  return {
+    byKind,
+    total: D.register.length,
+    // A "hole" is any row that is not the one row recording something the
+    // state does publish -- that row is in the register because this project's
+    // own QA twice said it did not exist, not because it is missing.
+    holes: D.register.filter(r => r.kind !== "published").length,
+    withheld: byKind["collected, not published"] || 0,
+    // Rows carrying a positive receipt: someone obtained it anyway. The school
+    // identifier's note is a NEGATIVE ("not obtainable"), so it is excluded --
+    // counting it would claim a receipt that does not exist.
+    obtained: D.register.filter(r =>
+      r.obtained_by && !/^not obtainable/i.test(r.obtained_by)).length,
   };
-  document.getElementById(hostId).innerHTML = D.register.map(r => {
-    const [fg, bg] = KIND[r.kind] || ["--verify-observed", "--verify-observed-bg"];
-    return `<div class="row">
-      <span class="f">${r.field}</span><span class="k" style="background:var(${bg});color:var(${fg})">${r.kind}</span>
+}
+
+export function register(D, hostId) {
+  const counts = registerCounts(D);
+  // The distribution is the finding: four things never collected, five held and
+  // withheld. That shape is invisible when sixteen probes run as open prose, so
+  // it is stated first and each entry collapses to one line under it.
+  const chips = Object.keys(REGISTER_KIND)
+    .filter(k => counts.byKind[k])
+    .map(k => {
+      const [fg, bg] = REGISTER_KIND[k];
+      return `<span class="k" style="background:var(${bg});color:var(${fg})">` +
+             `${counts.byKind[k]} ${k}</span>`;
+    }).join("");
+
+  const rows = D.register.map(r => {
+    const [fg, bg] = REGISTER_KIND[r.kind] || ["--verify-observed", "--verify-observed-bg"];
+    // The closed label names what is inside, so a reader knows the probe exists
+    // and is one click away. Two real spans rather than CSS ::content: the text
+    // is selectable, findable with ctrl-F, and survives a stylesheet failure.
+    const shows = r.obtained_by ? "show the probe and the receipt" : "show the probe";
+    return `<details class="regrow">
+      <summary><span class="f">${r.field}</span>` +
+      `<span class="k" style="background:var(${bg});color:var(${fg})">${r.kind}</span>` +
+      `<span class="hint hint-shut">${shows}</span><span class="hint hint-open">hide</span></summary>
       <div class="probe"><strong style="color:var(--text-muted);font-weight:600">Probe.</strong> ${r.probe}</div>
       ${r.obtained_by ? `<div class="got"><b>Obtained by.</b> ${r.obtained_by}</div>` : ""}
-    </div>`;
+    </details>`;
   }).join("");
+
+  document.getElementById(hostId).innerHTML =
+    `<p class="reg-summary">${chips}</p>${rows}`;
 }
 
 export function completeness(D, hostId) {

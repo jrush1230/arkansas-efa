@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Methodology &amp; sources — Arkansas EFA</title>
-<meta name="description" content="How the Arkansas EFA published-record page is built: sources, the four provenance badges, the derived figures and their cross-checks, and every known anomaly in the source documents.">
+<meta name="description" content="How the Arkansas EFA published-record page is built: sources, the five provenance badges, the derived figures and their cross-checks, and every known anomaly in the source documents.">
 <link rel="canonical" href="https://arkansas-efa.sidetownlabs.com/methodology.html">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Methodology &amp; sources — Arkansas EFA">
@@ -63,7 +63,7 @@ transcribed, and every defect known to exist in the source documents.</p>
 programme's entire published record is two annual reports, a series of appropriation acts, and a
 homeschool count series. The page draws all of it, and then records what is missing.</p>
 
-<h2>The four badges</h2>
+<h2>The five badges</h2>
 <p>Every figure declares what kind of claim it is before you read the number.</p>
 <dl class="badges">
   <dt><span class="verify-badge" data-verify="published"><span class="verify-dot"></span>published</span></dt>
@@ -75,14 +75,31 @@ homeschool count series. The page draws all of it, and then records what is miss
   <dt><span class="verify-badge" data-verify="obtained"><span class="verify-dot"></span>obtained</span></dt>
   <dd>State-held records released to a named requester under freedom-of-information law and
   published by someone else &mdash; not published by the state.</dd>
+  <dt><span class="verify-badge" data-verify="reported"><span class="verify-dot"></span>reported</span></dt>
+  <dd>A figure the department stated to a journalist, appearing in no state document and in no
+  released record. Attributed, exact, and unverifiable against anything the state has
+  published.</dd>
   <dt><span class="verify-badge" data-verify="absent"><span class="verify-dot"></span>absent</span></dt>
   <dd>The state does not publish it. Each entry records what was checked, where, when, and what
   came back.</dd>
 </dl>
-<p style="margin-top:16px"><em>Obtained</em> is not a fourth concept diluting three. It is the
+<p style="margin-top:16px"><em>Obtained</em> is not a concept diluting the others. It is the
 absence register's own &ldquo;collected, not published&rdquo; category seen from the other side:
 the register row says the state holds tuition data and will not print it, and the chart shows the
 number a requester got anyway. They cross-link on the page deliberately.</p>
+<p><em>Reported</em> is the third face of the same coin, and it was added on 27 July 2026 to fix
+a defect in this page. Until then the three 2026-27 approval counts were badged
+<em>obtained</em>. They should not have been: the article attributes them to a named department
+spokesperson, not to released records &mdash; and it does so in the sentence directly after the
+&ldquo;nearly 57,000&rdquo; this page refuses <em>on the grounds that a spokesperson said it</em>.
+The page was enforcing a rule against one figure and breaking it for three others, then badging
+the breach as records-obtained. Separating the tier fixes that, and it makes something visible
+that a footnote would have buried: the most current participation figures for a programme with a
+$309m appropriation exist <strong>only</strong> as a quote to a newspaper.</p>
+<p>The tier list is defined in exactly one place &mdash; <code>TIERS</code> in
+<code>build_efa_json.py</code> &mdash; and reaches this page through the data file. The check
+script asserts that the project README, the working methodology document, this page and the main
+page all state the same set, so they cannot drift apart.</p>
 
 <h2>Sources</h2>
 <h3>Primary &mdash; the state's own publications</h3>
@@ -103,14 +120,28 @@ school tuition rates&rdquo;</em>, Antoinette Grajeda,
 The article's own sourcing sentence:</p>
 <blockquote><p>Data was collected from Educational Freedom Account program applications provided
 by the Arkansas Department of Education through a state Freedom of Information Act request.</p></blockquote>
-<p>Used for six 2026-27 figures, all badged <em>obtained</em>: average tuition of about $9,800 and
-the school-application counts (176 applied, 164 approved, 2 denied, 10 under review) from the FOIA
-records; and 51,041 applications approved &mdash; 28,096 private school, 22,945 homeschool &mdash;
-attributed to the Department in the same article.</p>
-<p><strong>Deliberately excluded:</strong> the article's &ldquo;nearly 57,000 students applied&rdquo;,
-attributed to a department spokesperson rather than to records. A hedged round number drawn as a
-precise bar would assert a precision the source disclaims, so the 2026-27 funnel row begins at
-<em>approved</em>. The exclusion and its reason are recorded in the data file itself, not only here.</p>
+<p>Eight 2026-27 figures come from this article, in <strong>two tiers</strong> &mdash; because the
+article itself has two kinds of sourcing in it, and the sentence quoted above describes only one
+of them. All eight are drawn on the page.</p>
+<ul>
+  <li>Badged <em>obtained</em>, from the released application records: average tuition of about
+  $9,800, and the school-application counts (176 applied, 164 approved, 2 denied, 10 under
+  review).</li>
+  <li>Badged <em>reported</em>, attributed in the article to a named department spokesperson:
+  51,041 applications approved &mdash; 28,096 private school, 22,945 homeschool, as of
+  26 June 2026.</li>
+</ul>
+<p>The split is not judgement applied after the fact. Each figure carries a source kind in the
+data file, the badge is resolved from it mechanically, and the check script asserts that no
+figure is rendered under a badge its source kind does not earn.</p>
+<p><strong>Deliberately excluded:</strong> the article's &ldquo;nearly 57,000 students
+applied&rdquo;. The reason is <strong>precision, not provenance</strong> &mdash; it comes from
+the same spokesperson, in the same breath, as the approval counts the page does plot, so
+provenance cannot be what separates them. The speaker hedged this figure and did not hedge those.
+Drawing a round number the source itself qualified as a precise bar would assert a precision the
+source disclaims, so the 2026-27 funnel row begins at <em>approved</em> and the applications
+figure is quoted in words instead. The exclusion, its reason, and the fact that it shares a
+speaker with the plotted figures are all recorded in the data file, not only here.</p>
 <p><strong>The as-of date is derived, not stated.</strong> The article says &ldquo;as of
 Friday&rdquo; and published Wednesday 1 July 2026; the preceding Friday was 26 June 2026. It is
 labelled as derived from the publication date wherever it appears.</p>
@@ -134,7 +165,7 @@ defect is closed by a test.</p>
 <p>The check script <strong>does not trust the data file</strong>: it reads the source tables,
 re-derives every quantity independently, and compares &mdash; including re-implementing the name
 normalisation rather than importing it, so a bug shared between builder and checker cannot pass.
-Current count: <strong>292 assertions, all passing.</strong></p>
+Current count: <strong>383 assertions, all passing.</strong></p>
 
 <h2>Derived figures, and what cross-checks them</h2>
 <p><strong>Implied per-school dollars</strong> = a school's participants &times; that year's
@@ -217,11 +248,13 @@ that no build script imports a fuzzy-matching library.</p>
 </ol>
 
 <h2>Completeness</h2>
-<p>All 27 numbered tables, figures and appendices in both reports are accounted for on the main
-page's completeness audit, which is enumerated programmatically from the documents rather than
-from their contents pages. Eight were missed by the original extraction and found by a later
-audit. Three are deliberately unused: Tables 9 and 10 disaggregate Table 8 by sector and add no
-instrument not already present, and Appendix A is definitional prose.</p>
+<p>All <span data-count="objects">27</span> numbered tables, figures and appendices in both reports
+are accounted for on the main page's completeness audit, which is enumerated programmatically from
+the documents rather than from their contents pages. Of those,
+<span data-count="sweep">13</span> were missed by the first pass and found by a later sweep, and
+<span data-count="reference">4</span> are deliberately unused: Figure 6 restates the programme's
+cost against the DESE budget, Tables 9 and 10 disaggregate Table 8 by sector and add no instrument
+not already present, and Appendix A is definitional prose.</p>
 
 <h2>Scope</h2>
 <p>One page. No drill-down, no map, no per-school view. If a chart needed data we do not hold, the
@@ -246,8 +279,29 @@ https://arkansas-efa.sidetownlabs.com/.</p>
 </div>
 
 <script type="module">
-  import { loadVintage, renderVintage } from "./shared.js";
+  import { loadEfa, loadVintage, renderVintage } from "./shared.js";
   renderVintage(await loadVintage(), "vintage");
+
+  /* The completeness counts in the prose are read from the data file, for the
+     same reason the main page reads its findings block from it (see
+     fillDerivedCounts in index.js). This paragraph shipped saying "Eight ...
+     Three" while the main page computed "13 ... 4" from efa.json: two pages
+     stating different numbers for the same count. The derived-count refactor
+     removed the hardcode from index.html and was not carried here; a number
+     typed into this markup is a number that goes stale silently. The static
+     values above are correct fallbacks for a module failure, not a second
+     source of truth. */
+  try {
+    const D = await loadEfa();
+    const n = s => D.completeness.filter(r => r.status === s).length;
+    const set = (k, v) => document.querySelectorAll(`[data-count="${k}"]`)
+      .forEach(node => { node.textContent = v; });
+    set("objects", D.completeness.length);
+    set("sweep", n("found in sweep"));
+    set("reference", n("reference only"));
+  } catch (err) {
+    /* Prose page: the fallbacks stand and the reader loses nothing. */
+  }
 </script>
 <script>
   window.goatcounter = { path: function(p) { return 'efa' + p } };
