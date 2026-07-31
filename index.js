@@ -3,7 +3,7 @@
  * Loads data/efa.json once, hands it to each renderer, and wires the inline
  * download links. Nothing here computes a displayed value.
  */
-import { loadEfa, loadVintage, renderVintage, downloads } from "./shared.js";
+import { loadEfa, loadVintage, renderVintage, downloads, num, money } from "./shared.js";
 import * as C from "./charts.js";
 
 /* Every published CSV, in the order the page uses them. The filenames must
@@ -54,11 +54,11 @@ async function main() {
   C.eligibility(D, "c-elig");
   C.moneyChart(D, "c-money");
   C.categories(D, "c-cats");
-  C.twoProgrammes(D, "c-twoprog");
+  C.twoPrograms(D, "c-twoprog");
   C.explosion(D, "c-explosion");
   C.concentration(D, "c-conc", "conc-summary");
   C.topRecipients(D, "c-top");
-  C.shareOfEnrolment(D, "c-share");
+  C.shareOfEnrollment(D, "c-share");
   C.growth(D, "c-growth");
   C.impliedDollars(D, "c-implied");
   C.semesterCheck(D, "c-semester", "sem-note");
@@ -115,14 +115,55 @@ function wireChartScroll() {
  * the top and the two disclosure summaries at the foot. Every one is read from
  * efa.json here rather than typed into the markup — a hardcoded "15 checks" is
  * a number that goes stale silently, which is the exact failure this page
- * exists to criticise. The static values in index.html are correct fallbacks
+ * exists to criticize. The static values in index.html are correct fallbacks
  * for a module failure, not a second source of truth. */
+/* Figures that appear inside a sentence rather than inside a chart. Same rule
+ * as the counts above and the same failure mode: the opening line of Part one
+ * carried "roughly one in ten Arkansas students" and "a third of a billion" for
+ * as long as the page was live, and neither could be checked against anything
+ * in efa.json — the first had no denominator anywhere in the data, the second
+ * rounded a $309m ceiling up by 8% in the direction that flattered the point.
+ * Every figure below is a function of efa.json. Formatting happens here, which
+ * is presentation; the quantity never does. */
+function proseFigures(D) {
+  const fig = Object.fromEntries(D.obtained_2026_27.figures.map(f => [f.key, f.value]));
+  const s34 = D.state_summary["34"], s35 = D.state_summary["35"];
+  // money() rounds to whole millions above $10m, which prints the first year's
+  // spend as $35m — the same overstatement, one order down. One decimal here.
+  const oneDp = v => "$" + (v / 1e6).toFixed(1) + "m";
+  return {
+    // Part one's opening sentence. approved_2627 is `reported` tier, which is
+    // why the sentence attributes it in the same breath rather than after it.
+    approved_2627: num(fig.approved_total),
+    approved_first_year: num(s34.total_approved_applicants),
+    spend_first_year: oneDp(s34.total_funding_usd),
+    approp_ceiling: money(D.derived.appropriated_36_with_supplement),
+    // The 2026-27 school-application outcomes. The page published the under-
+    // review count in the CSV and omitted it from the sentence summarizing it,
+    // so the sentence said 176 applied, 164 approved, 2 denied — ten schools
+    // short of its own arithmetic. All four are bound; the identity holds.
+    schools_applied: num(fig.schools_applied),
+    schools_approved: num(fig.schools_approved),
+    schools_denied: num(fig.schools_denied),
+    schools_under_review: num(fig.schools_under_review),
+    // How much of the school-level record the growth chart can actually cover.
+    growth_matched: num(D.identity.matched),
+    growth_total: num(D.identity.fy35_total),
+    growth_unresolved: num(D.identity.unresolved),
+    // ATLAS: four schools chose to sit the state test, out of the participants.
+    atlas_other: num(s35.n_schools - D.atlas.schools.length),
+    atlas_total: num(s35.n_schools),
+  };
+}
+
 function fillDerivedCounts(D) {
   const c = C.registerCounts(D);
   const set = (sel, v) => document.querySelectorAll(sel).forEach(n => { n.textContent = v; });
   set('[data-count="holes"]', c.holes);
   set('[data-count="withheld"]', c.withheld);
   set('[data-count="obtained"]', c.obtained);
+  const prose = proseFigures(D);
+  Object.keys(prose).forEach(k => set(`[data-efa="${k}"]`, prose[k]));
 
   const audit = document.getElementById("audit-claim");
   if (audit) {

@@ -1,7 +1,7 @@
 /* Arkansas EFA — chart renderers.
  *
  * One function per figure. Every one takes the loaded efa.json and draws it.
- * None of them contains a datum: layout constants and colour token names only.
+ * None of them contains a datum: layout constants and color token names only.
  * That is the invariant this file exists to hold, and scripts/spot_check.py
  * enforces it by asserting the rendered values against the source tables.
  *
@@ -13,7 +13,7 @@ import { el, svg, text, hover, css, money, dollars, num, titleCase, truncate, ba
 
 const W = 900;   // every chart's viewBox width; height varies
 
-/* Badge tier -> colour token, so a tier drawn inside an SVG reads as the same
+/* Badge tier -> color token, so a tier drawn inside an SVG reads as the same
  * object as the HTML .verify-badge pill. Names only; the values live in
  * app.css and the tier list itself lives in build_efa_json.py's TIERS. */
 const TIER_TOKEN = {
@@ -98,9 +98,9 @@ export function funnel(D, hostId) {
         text(s, PAD + bw + 8, y + 4.5, num(v), "val");
         text(s, PAD + bw + 8 + String(num(v)).length * 7.6 + 6, y + 4.5, nm.toLowerCase(), "ax");
       });
-    // Per-row tier, in the label gutter beneath the year. Colour follows the
+    // Per-row tier, in the label gutter beneath the year. Color follows the
     // badge token so it reads as the same object as the HTML pills; the word is
-    // always present, because colour is never the sole channel.
+    // always present, because color is never the sole channel.
     text(s, 0, y0 + 34, r.tier, "ax")
       .setAttribute("fill", css(TIER_TOKEN[r.tier] || "--text-muted"));
     if (r.tag) text(s, 0, y0 + 46, r.tag, "ax");
@@ -224,7 +224,7 @@ export function moneyChart(D, hostId) {
   const H = 340, PAD = 64, s = svg(hostId, W, H, "Appropriated, spent and requested amounts by year");
   // Year labels come from the data's own school_year, never a hardcoded map.
   const fys = Object.fromEntries(D.appropriations.map(r => [r.fy, r.school_year]));
-  const colour = { appropriated: css("--cat-1"), spent: css("--cat-3"),
+  const color = { appropriated: css("--cat-1"), spent: css("--cat-3"),
     reserve: css("--cat-7"), supplemental: css("--cat-7"), requested: css("--cat-6") };
   const max = 400e6, y = v => H - 46 - (v / max) * (H - 80);
   const xs = fy => PAD + ((fy - 34) + 0.5) * ((W - PAD - 20) / 4);
@@ -242,7 +242,7 @@ export function moneyChart(D, hostId) {
       const k = Math.round(r.amount / 1e6);
       seen[k] = (seen[k] || 0) + 1;
       hover(el("circle", { cx: xs(+fy) + (seen[k] - 1) * 13, cy: y(r.amount), r: 6.5,
-        fill: colour[r.measure] || css("--neutral"),
+        fill: color[r.measure] || css("--neutral"),
         stroke: css("--surface-1"), "stroke-width": 2 }, s),
         `<b>${fys[fy]} — ${r.measure}</b><br>${dollars(r.amount)}<br>` +
         `<span style="opacity:.75">${r.as_of} · ${r.source}</span>`);
@@ -282,7 +282,7 @@ export function categories(D, hostId) {
     `A refunds/cancellations row of ${dollars(refunds.amount)} across ${num(refunds.transactions)} transactions is omitted from these two bars.`, "ax");
 }
 
-export function twoProgrammes(D, hostId) {
+export function twoPrograms(D, hostId) {
   const S = D.cat_by_sector, H = 430;
   const s = svg(hostId, W, H, "Spending by category, private school students versus homeschool students");
   [["Private school students", S.private, css("--cat-1")],
@@ -392,8 +392,8 @@ export function topRecipients(D, hostId) {
 
 /* ── Part four: which schools? ──────────────────────────────────────────── */
 
-export function shareOfEnrolment(D, hostId) {
-  const H = 250, s = svg(hostId, W, H, "Distribution of voucher students as a share of school enrolment");
+export function shareOfEnrollment(D, hostId) {
+  const H = 250, s = svg(hostId, W, H, "Distribution of voucher students as a share of school enrollment");
   const bins = fy => {
     const b = new Array(10).fill(0);
     D.schools.filter(x => x.fy === fy && x.pct != null)
@@ -410,11 +410,11 @@ export function shareOfEnrolment(D, hostId) {
     b.forEach((v, i) => {
       const h = v / max * 150, x = x0 + i * w, y = H - 58 - h;
       hover(el("rect", { x, y, width: w - 3, height: Math.max(h, 1), rx: 4, fill: col }, s),
-        `<b>${i * 10}–${i * 10 + 9}% of enrolment</b><br>${v} school${v === 1 ? "" : "s"}`);
+        `<b>${i * 10}–${i * 10 + 9}% of enrollment</b><br>${v} school${v === 1 ? "" : "s"}`);
       if (v) text(s, x + (w - 3) / 2, y - 9, v, "ax", "middle");
     });
     [0, 50, 100].forEach(t => text(s, x0 + (t / 10) * w, H - 40, t + "%", "ax", "middle"));
-    text(s, x0, H - 18, "voucher students as a share of the school's enrolment", "ax");
+    text(s, x0, H - 18, "voucher students as a share of the school's enrollment", "ax");
   });
 }
 
@@ -532,7 +532,7 @@ export function identity(D, hostId) {
 
 export function assessment(D, hostId) {
   const m = D.schools_joined.filter(r => r.math != null && r.ela != null);
-  const H = 380, PAD = 60, s = svg(hostId, W, H, "Average maths and ELA percentile by school");
+  const H = 380, PAD = 60, s = svg(hostId, W, H, "Average math and ELA percentile by school");
   const x = v => PAD + v / 100 * (W - PAD - 60), y = v => H - PAD - v / 100 * (H - PAD - 30);
   [0, 25, 50, 75, 100].forEach(v => {
     el("line", { x1: PAD, y1: y(v), x2: W - 60, y2: y(v), class: "gl" }, s);
@@ -546,16 +546,16 @@ export function assessment(D, hostId) {
   m.forEach(r => {
     hover(el("circle", { cx: x(r.math), cy: y(r.ela), r: Math.max(3.5, Math.sqrt(r.efa35) / 2.1),
       fill: css("--cat-1"), "fill-opacity": .42, stroke: css("--cat-1"), "stroke-opacity": .7 }, s),
-      `<b>${r.name}</b><br>maths ${r.math}th percentile · ELA ${r.ela}th<br>${r.efa35} voucher students`);
+      `<b>${r.name}</b><br>math ${r.math}th percentile · ELA ${r.ela}th<br>${r.efa35} voucher students`);
   });
   text(s, PAD, H - 16,
-    `x: average maths percentile · y: average ELA percentile · ${m.length} schools`, "ax");
+    `x: average math percentile · y: average ELA percentile · ${m.length} schools`, "ax");
 }
 
 export function retention(D, hostId) {
   // CORRECTION: school-level only. The source table's 127 rows are 126 schools
   // plus one Homeschool aggregate; the pack plotted all 127 and captioned it
-  // "one mark per school (127)". The aggregate is reported beside the chart
+  // "one mark per school (127)". The aggregate is stated beside the chart
   // instead, never inside it.
   const r = D.retention.schools.slice().sort((a, b) => a.in_program - b.in_program);
   const H = 210, PADL = 44, s = svg(hostId, W, H, "Share of each school's voucher students continuing into 2025-26");
@@ -567,14 +567,14 @@ export function retention(D, hostId) {
   r.forEach((d, i) => {
     hover(el("circle", { cx: x(d.in_program), cy: (i % 9) * 13 + 24, r: 4, fill: css("--cat-1"),
       "fill-opacity": .55, stroke: css("--surface-1"), "stroke-width": 1 }, s),
-      `<b>${d.school}</b><br>${d.in_program}% stayed in the programme<br>${d.same_school}% stayed at this school`);
+      `<b>${d.school}</b><br>${d.in_program}% stayed in the program<br>${d.same_school}% stayed at this school`);
   });
   const med = r[Math.floor(r.length / 2)].in_program;
   el("line", { x1: x(med), y1: 16, x2: x(med), y2: H - 46, stroke: css("--cat-2"), "stroke-width": 2 }, s);
   text(s, x(med) + 8, 16, "median " + med + "%", "val");
   const agg = D.retention.aggregate[0];
   text(s, PADL, H - 24,
-    `One mark per school (${r.length}). Horizontal position is the share of its voucher students continuing in the programme.`, "ax");
+    `One mark per school (${r.length}). Horizontal position is the share of its voucher students continuing in the program.`, "ax");
   if (agg) text(s, PADL, H - 8,
     `The table's ${D.retention.n_rows_in_table}th row is a Homeschool aggregate (${agg.in_program}%), not a school — excluded here.`, "ax");
 }
@@ -721,7 +721,7 @@ export function homeschool(D, hostId) {
   const max = Math.max(...h.map(d => d.n)) * 1.08;
   const x = i => PADL + (i / (h.length - 1)) * (W - PADL - 40);
   const y = v => H - PADB - (v / max) * (H - PADB - 26);
-  // The EFA-era band starts at the programme's first year, taken from the
+  // The EFA-era band starts at the program's first year, taken from the
   // award series rather than typed.
   const firstEfaYear = D.award.by_fy["34"].school_year;
   const efaStart = h.findIndex(d => d.school_year.slice(0, 4) === firstEfaYear.slice(0, 4));
@@ -751,7 +751,7 @@ export function instruments(D, hostId) {
   const max = Math.max(...I.map(r => r.completions)), BARW = 290, DX = 610, DW = 210;
   text(s, PAD, 14, "Test completions", "ax");
   text(s, DX, 14, "Average percentile", "ax");
-  text(s, DX + 126, 14, "● maths", "ax").setAttribute("fill", css("--cat-2"));
+  text(s, DX + 126, 14, "● math", "ax").setAttribute("fill", css("--cat-2"));
   text(s, DX + 176, 14, "● reading", "ax").setAttribute("fill", css("--cat-3"));
   const sx = v => DX + v / 100 * DW;
   I.forEach((r, i) => {
@@ -760,10 +760,10 @@ export function instruments(D, hostId) {
     text(s, PAD - 10, y + 7, truncate(r.short, 31), "lbl", "end");
     const w = r.completions / max * BARW;
     hover(el("rect", { x: PAD, y, width: Math.max(w, 2), height: 13, rx: 4, fill: css("--cat-1") }, s),
-      `<b>${r.name}</b><br>${num(r.completions)} completions<br>maths ${r.math}th · reading ${r.reading}th percentile`);
+      `<b>${r.name}</b><br>${num(r.completions)} completions<br>math ${r.math}th · reading ${r.reading}th percentile`);
     text(s, PAD + w + 8, y + 7, num(r.completions), "ax");
     el("line", { x1: sx(0), y1: y + 7, x2: sx(100), y2: y + 7, stroke: css("--gridline"), "stroke-width": 1 }, s);
-    [[r.math, css("--cat-2"), "maths"], [r.reading, css("--cat-3"), "reading"]].forEach(([v, c, nm]) =>
+    [[r.math, css("--cat-2"), "math"], [r.reading, css("--cat-3"), "reading"]].forEach(([v, c, nm]) =>
       hover(el("circle", { cx: sx(v), cy: y + 7, r: 4.5, fill: c }, s),
         `<b>${r.name}</b><br>${nm} ${v}th percentile`));
     if (i === I.length - 1) [0, 50, 100].forEach(v => text(s, sx(v), y + 24, v, "ax", "middle"));
@@ -781,7 +781,7 @@ export function atlas(D, hostId) {
     let cx = PAD; const w = W - PAD - 168;
     // Values are drawn exactly as printed. Six of the fourteen published rows
     // sum to 99 or 101 — the source rounds each level independently — so the
-    // bar deliberately does not reach the full width. Normalising to 100 would
+    // bar deliberately does not reach the full width. Normalizing to 100 would
     // invent precision the source does not have.
     vals.forEach((v, i) => {
       const bw = v / 100 * w;
@@ -815,7 +815,12 @@ export function coverage(D, hostId) {
     published: ["Published", css("--cat-3")],
     partial: ["Partial", css("--cat-7")],
     obtained: ["Obtained under FOIA", css("--obtained")],
-    conflict: ["Reported inconsistently", css("--cat-2")],
+    // This label used to lead with the word the `reported` badge now owns, and
+    // that tier means something quite different: a figure given to a
+    // journalist. These cells are the opposite — the state's own documents
+    // state the measure and disagree with each other. (spot_check family K
+    // asserts the old wording is gone, so it is not quoted here.)
+    conflict: ["Stated inconsistently", css("--cat-2")],
     absent: ["Absent", null],
   };
   yrs.forEach((yr, j) => text(s, PAD + j * cw + cw / 2, 18, yr, "ax", "middle"));
@@ -848,7 +853,7 @@ export function coverage(D, hostId) {
   });
 }
 
-// Colour follows the claim: "collected, not published" is the category the
+// Color follows the claim: "collected, not published" is the category the
 // obtained badge surfaces in the main body, so it wears the obtained token.
 // Declaration order is also display order for the summary chips: the two
 // "the state never had it" kinds, then the withheld kind, then the three

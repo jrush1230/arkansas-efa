@@ -59,8 +59,8 @@
 transcribed, and every defect known to exist in the source documents.</p>
 
 <h2>What this is</h2>
-<p>Everything Arkansas has published about its Education Freedom Account programme, charted. The
-programme's entire published record is two annual reports, a series of appropriation acts, and a
+<p>Everything Arkansas has published about its Education Freedom Account program, charted. The
+program's entire published record is two annual reports, a series of appropriation acts, and a
 homeschool count series. The page draws all of it, and then records what is missing.</p>
 
 <h2>The five badges</h2>
@@ -94,7 +94,7 @@ spokesperson, not to released records &mdash; and it does so in the sentence dir
 &ldquo;nearly 57,000&rdquo; this page refuses <em>on the grounds that a spokesperson said it</em>.
 The page was enforcing a rule against one figure and breaking it for three others, then badging
 the breach as records-obtained. Separating the tier fixes that, and it makes something visible
-that a footnote would have buried: the most current participation figures for a programme with a
+that a footnote would have buried: the most current participation figures for a program with a
 $309m appropriation exist <strong>only</strong> as a quote to a newspaper.</p>
 <p>The tier list is defined in exactly one place &mdash; <code>TIERS</code> in
 <code>build_efa_json.py</code> &mdash; and reaches this page through the data file. The check
@@ -164,8 +164,8 @@ artifact could have told you that. They are now data with provenance fields, and
 defect is closed by a test.</p>
 <p>The check script <strong>does not trust the data file</strong>: it reads the source tables,
 re-derives every quantity independently, and compares &mdash; including re-implementing the name
-normalisation rather than importing it, so a bug shared between builder and checker cannot pass.
-Current count: <strong>401 assertions, all passing.</strong></p>
+normalization rather than importing it, so a bug shared between builder and checker cannot pass.
+Current count: <strong>474 assertions, all passing.</strong></p>
 
 <h2>Derived figures, and what cross-checks them</h2>
 <p><strong>Implied per-school dollars</strong> = a school's participants &times; that year's
@@ -186,7 +186,7 @@ net figure was published for 2023-24 or 2024-25, so none is drawn for those year
 
 <h2>Matching, and why there is no fuzzy matching anywhere</h2>
 <p>Schools appear by name only &mdash; no code, no ID, no address. Matching is <strong>exact on a
-normalised name</strong>: case, punctuation and spacing removed, and the parenthesised city
+normalized name</strong>: case, punctuation and spacing removed, and the parenthesized city
 stripped. Stripping the city is what makes campuses collapse, so every use of the cross-table key
 reports its collision count:</p>
 <ul>
@@ -206,7 +206,7 @@ that no build script imports a fuzzy-matching library.</p>
   <li><strong>The 2023-24 mean share does not reproduce.</strong> Averaging that report's own 97
   per-school percentages gives <strong>37.9%</strong>; the same report states <strong>39%</strong>.
   Not an extraction error: the column sums to the report's own 5,548 participants exactly, and an
-  enrolment-weighted mean gives 26.5%, so it is neither. The 2024-25 equivalent <em>does</em>
+  enrollment-weighted mean gives 26.5%, so it is neither. The 2024-25 equivalent <em>does</em>
   reproduce (47.8% against a stated 48%). It appears as a failing row in the reconciliation table
   rather than being smoothed over.</li>
   <li><strong>The 2024-25 report gives two Succeed Scholarship figures</strong> &mdash; $7,617 on
@@ -233,12 +233,12 @@ that no build script imports a fuzzy-matching library.</p>
   schools absent from it entirely.</li>
   <li><strong>Cross-table matching requires a key that collapses campuses.</strong> See above.</li>
   <li><strong>Appendix B recipient names are not the same strings as Table 1 school names.</strong>
-  <code>BAPTIST PREP</code> against <code>Baptist Prep</code>. The join is exact-normalised and
+  <code>BAPTIST PREP</code> against <code>Baptist Prep</code>. The join is exact-normalized and
   reports its miss rate: 103 of 122 keys matched, and 9 appendix keys merge two or more printed
   rows.</li>
   <li><strong>ATLAS percentages do not sum to 100 on 6 of 14 rows</strong> (99 or 101). The source
   rounds each level independently. Stored and drawn exactly as printed; rows that do not sum to
-  100 say so on the chart. <strong>Not</strong> normalised.</li>
+  100 say so on the chart. <strong>Not</strong> normalized.</li>
   <li><strong>A retention rate above 100% is printed</strong> &mdash; The Huda Academy, 105.3%.
   Stored as printed, not clipped.</li>
   <li><strong>The 2024-25 Table 2 contains a Homeschool aggregate row</strong> among its named
@@ -252,16 +252,16 @@ that no build script imports a fuzzy-matching library.</p>
 are accounted for on the main page's completeness audit, which is enumerated programmatically from
 the documents rather than from their contents pages. Of those,
 <span data-count="sweep">13</span> were missed by the first pass and found by a later sweep, and
-<span data-count="reference">4</span> are deliberately unused: Figure 6 restates the programme's
+<span data-count="reference">4</span> are deliberately unused: Figure 6 restates the program's
 cost against the DESE budget, Tables 9 and 10 disaggregate Table 8 by sector and add no instrument
 not already present, and Appendix A is definitional prose.</p>
 
 <h2>Scope</h2>
 <p>One page. No drill-down, no map, no per-school view. If a chart needed data we do not hold, the
 chart was cut rather than the data estimated. The ProPublica and Delta Institute material on this
-programme is journalism, not this project's data, and is not republished here.</p>
+program is journalism, not this project's data, and is not republished here.</p>
 
-<h2>Licence and citation</h2>
+<h2>License and citation</h2>
 <p>CC BY-NC 4.0. The published CSVs and the workbook carry the same grant.</p>
 <p>Rush, Joel. <em>Arkansas EFA &mdash; the published record.</em> Sidetown Labs, 2026.
 https://arkansas-efa.sidetownlabs.com/.</p>

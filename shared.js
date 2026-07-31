@@ -125,7 +125,7 @@ export function hover(node, html) {
 /* ── page furniture ─────────────────────────────────────────────────────── */
 
 /** The provenance badge. `kind` is published | derived | obtained | absent.
- *  The text label is mandatory — colour is never the sole channel. */
+ *  The text label is mandatory — color is never the sole channel. */
 export function badge(kind) {
   return `<span class="verify-badge" data-verify="${kind}">` +
          `<span class="verify-dot" aria-hidden="true"></span>${kind}</span>`;

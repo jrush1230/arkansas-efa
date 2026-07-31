@@ -2,10 +2,10 @@
 
 Everything here was transcribed from the two annual reports the Arkansas
 Office of Special Projects / DESE has published on the Education Freedom
-Account programme, plus the programme's appropriation record. The state
+Account program, plus the program's appropriation record. The state
 publishes these as PDF tables only; this is the same content, machine-readable.
 
-Licence: CC BY-NC 4.0. Suggested citation:
+License: CC BY-NC 4.0. Suggested citation:
 
     Rush, Joel. Arkansas EFA — the published record. Sidetown Labs, 2026.
     https://arkansas-efa.sidetownlabs.com/.
@@ -34,8 +34,8 @@ reconciliation checks and known anomalies: the site's Methodology page.
 3. **No persistent school identifier exists.** Schools appear by name only, the
    names change between reports, and names are not unique within a report once
    the disambiguating city is stripped. Any cross-year join has to be
-   exact-normalised and has to report its miss rate. A school cannot be tracked
-   reliably across two years of its own programme.
+   exact-normalized and has to report its miss rate. A school cannot be tracked
+   reliably across two years of its own program.
 
 ## Files
 
@@ -53,7 +53,7 @@ reconciliation checks and known anomalies: the site's Methodology page.
 
 ### `efa-assessment-by-school.csv`
 
-128 rows. Average maths and ELA percentile by school, 2024-25 (128 rows). 2024-25 annual report, Appendix C. Nulls are where the source prints N/A.
+128 rows. Average math and ELA percentile by school, 2024-25 (128 rows). 2024-25 annual report, Appendix C. Nulls are where the source prints N/A.
 
 ### `efa-assessment-by-instrument.csv`
 
@@ -61,7 +61,7 @@ reconciliation checks and known anomalies: the site's Methodology page.
 
 ### `efa-atlas-performance-levels.csv`
 
-14 rows. ATLAS performance-level distributions, statewide and for the four schools that administered it (14 rows). 2024-25 annual report, Table 11 and Appendix D. Rows summing to 99 or 101 are the source's independent rounding -- not normalised.
+14 rows. ATLAS performance-level distributions, statewide and for the four schools that administered it (14 rows). 2024-25 annual report, Table 11 and Appendix D. Rows summing to 99 or 101 are the source's independent rounding -- not normalized.
 
 ### `efa-providers-2023-24.csv`
 
@@ -69,7 +69,7 @@ reconciliation checks and known anomalies: the site's Methodology page.
 
 ### `efa-participation-by-school.csv`
 
-223 rows. Participating schools with EFA enrolment, total enrolment and EFA share, 2023-24 and 2024-25 (223 rows). Table 1 of both annual reports.
+223 rows. Participating schools with EFA enrollment, total enrollment and EFA share, 2023-24 and 2024-25 (223 rows). Table 1 of both annual reports.
 
 ### `efa-statewide-summary.csv`
 

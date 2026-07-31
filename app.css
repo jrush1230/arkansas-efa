@@ -20,7 +20,7 @@
  * published (the state printed this number) / derived (we computed it from
  * numbers the state printed) / absent (the state has not published it). Same
  * ordinal logic the fiscal tool uses — strongest claim gets the strongest
- * token — and the same rule that the text label is mandatory, so colour is
+ * token — and the same rule that the text label is mandatory, so color is
  * never the sole channel. The badge system IS the thesis of this page.
  */
 
@@ -34,9 +34,9 @@
   --border:         rgba(11,11,11,0.44);
   --link:           #2a78d6;
 
-  /* Brand caret — the one coloured element of the Sidetown Labs wordmark.
+  /* Brand caret — the one colored element of the Sidetown Labs wordmark.
      Values are the brand spec's own "accent caret", light and dark, not the
-     site's --link, because the mark is not to be recoloured per site.
+     site's --link, because the mark is not to be recolored per site.
      Shared vocabulary across both sibling sites and the homepage (keep
      byte-identical). */
   --brand-caret: #2B7EC9;
@@ -81,7 +81,7 @@
      requester under FOIA and published by someone else — a different claim from
      "the state published this", and the absence register's own "collected, not
      published" category surfacing in the main body. Violet is deliberately off
-     the teal→blue→grey ordinal ramp, because this is a different axis rather
+     the teal→blue→gray ordinal ramp, because this is a different axis rather
      than a weaker rung, and it must not read as the amber "provisional" marker,
      which is a third axis again. Validated against --prelim in both modes:
      ΔE 25.8 protan / 18.5 tritan / 27.0 normal in light, all six palette checks
@@ -197,10 +197,10 @@ html, body {
 @font-face {
   /* Latin subset of the Space Grotesk variable font, weights 300-700, so both
      the 600 "sidetown" and the 450 "labs" are real instances rather than
-     synthesised. Self-hosted (22 KB) rather than fetched from Google Fonts:
+     synthesized. Self-hosted (22 KB) rather than fetched from Google Fonts:
      these are no-build static sites, and a render-blocking third-party
      request on all 20 data pages is a bad trade for one 23px wordmark.
-     Licence: SIL OFL 1.1, shipped beside it as space-grotesk-OFL.txt. */
+     License: SIL OFL 1.1, shipped beside it as space-grotesk-OFL.txt. */
   font-family: "Space Grotesk";
   font-style: normal;
   font-weight: 300 700;
@@ -259,7 +259,7 @@ h2 {
 .hero-stat .stat-label { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
 
 /* ── The badge system ────────────────────────────────────────────────────────
-   The one thing this site does that nothing else does for this programme:
+   The one thing this site does that nothing else does for this program:
    every figure declares what KIND of claim it is before the reader reads the
    number. Five values, ordinal in how strong a claim they license:
 
@@ -292,7 +292,7 @@ h2 {
 
    Rendered on the same .verify-badge pill the fiscal site uses, against the
    same --verify-* token pairs, so a reader who has seen that site reads this
-   badge as the same object. The text label is mandatory: colour is never the
+   badge as the same object. The text label is mandatory: color is never the
    sole channel. `data-verify` = published | derived | obtained | reported |
    absent. */
 .verify-badge {
