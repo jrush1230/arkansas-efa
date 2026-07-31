@@ -80,8 +80,9 @@ homeschool count series. The page draws all of it, and then records what is miss
   released record. Attributed, exact, and unverifiable against anything the state has
   published.</dd>
   <dt><span class="verify-badge" data-verify="absent"><span class="verify-dot"></span>absent</span></dt>
-  <dd>The state does not publish it. Each entry records what was checked, where, when, and what
-  came back.</dd>
+  <dd>The state does not publish it. Each entry records what was checked, where, what came back,
+  and the evidence for it &mdash; a check date where someone looked, a citation where the report
+  itself settles it.</dd>
 </dl>
 <p style="margin-top:16px"><em>Obtained</em> is not a concept diluting the others. It is the
 absence register's own &ldquo;collected, not published&rdquo; category seen from the other side:
@@ -110,6 +111,7 @@ page all state the same set, so they cannot drift apart.</p>
   <li><strong>DESE State Aid Notices; Act 909 of 2025</strong> &mdash; foundation funding rates, used to <em>compute</em> the award.</li>
   <li><strong>DESE annual home school reports</strong> &mdash; the 1997-98 to 2025-26 series.</li>
   <li><strong>Ark. Code Ann. &sect;&nbsp;6-18-2505</strong> &mdash; the 90% allocation rule and the fee withholding.</li>
+  <li><strong>Ark. Code Ann. &sect;&nbsp;6-18-2506(a)(3)</strong> (added by Act 237 of 2023, &sect;&nbsp;42) &mdash; the three-step eligibility phase-in, and universal eligibility from 2025-26.</li>
   <li><strong>DESE EFA &ldquo;Information for Families&rdquo; and FAQ</strong> &mdash; the net-of-fee award amounts.</li>
 </ul>
 
@@ -138,9 +140,9 @@ figure is rendered under a badge its source kind does not earn.</p>
 applied&rdquo;. The reason is <strong>precision, not provenance</strong> &mdash; it comes from
 the same spokesperson, in the same breath, as the approval counts the page does plot, so
 provenance cannot be what separates them. The speaker hedged this figure and did not hedge those.
-Drawing a round number the source itself qualified as a precise bar would assert a precision the
-source disclaims, so the 2026-27 funnel row begins at <em>approved</em> and the applications
-figure is quoted in words instead. The exclusion, its reason, and the fact that it shares a
+The source said &ldquo;nearly 57,000.&rdquo; A bar would say 57,000. That is a claim the source
+did not make, so the 2026-27 row of the applications table begins at <em>approved</em> and the
+applications figure is quoted in words instead. The exclusion, its reason, and the fact that it shares a
 speaker with the plotted figures are all recorded in the data file, not only here.</p>
 <p><strong>The as-of date is derived, not stated.</strong> The article says &ldquo;as of
 Friday&rdquo; and published Wednesday 1 July 2026; the preceding Friday was 26 June 2026. It is
@@ -165,7 +167,7 @@ defect is closed by a test.</p>
 <p>The check script <strong>does not trust the data file</strong>: it reads the source tables,
 re-derives every quantity independently, and compares &mdash; including re-implementing the name
 normalization rather than importing it, so a bug shared between builder and checker cannot pass.
-Current count: <strong>474 assertions, all passing.</strong></p>
+Current count: <strong>709 assertions, all passing.</strong></p>
 
 <h2>Derived figures, and what cross-checks them</h2>
 <p><strong>Implied per-school dollars</strong> = a school's participants &times; that year's
@@ -178,6 +180,17 @@ be read off the reports; this computes it from two published numbers. Cross-chec
   $84,506,226 = <strong>51.1%</strong>. This needs no reconstruction at all and is the stronger of
   the two.</li>
 </ol>
+<h3 id="semester">Appendix B really is one semester</h3>
+<p>If the implied figures are sound, and if Appendix B really covers one semester as its footnote
+claims, then Appendix B should land at about half of implied full-year dollars. Each dot is one
+school; the dashed line is 50%.</p>
+<div class="card"><div id="c-semester"></div></div>
+<p class="srcline" id="sem-note"></p>
+<p>This chart lives here rather than on the main page because it validates a <em>method</em>, not
+a finding about vouchers &mdash; and the main page corroborates the one-semester claim already, in
+<a href="./#recon">its reconciliation table</a>, with the 51.1% row that needs no reconstruction
+at all.</p>
+
 <p><strong>The award series is computed, not transcribed.</strong> Each year is 0.90 &times; the
 prior year's foundation rate, and all four match the published figures exactly ($6,672 / $6,856 /
 $6,994 / $7,346). The chart therefore demonstrates the statute rather than restating it. The
@@ -299,6 +312,30 @@ https://arkansas-efa.sidetownlabs.com/.</p>
     set("objects", D.completeness.length);
     set("sweep", n("found in sweep"));
     set("reference", n("reference only"));
+
+    /* The one-semester cross-check moved here from the main page in S38: it
+       validates a method rather than a finding about vouchers. Same renderer,
+       same data file, same narrow-viewport scroll treatment as every chart on
+       the other page — a chart that scrolls has to be reachable by keyboard. */
+    const C = await import("./charts.js");
+    C.semesterCheck(D, "c-semester", "sem-note");
+    const host = document.getElementById("c-semester");
+    const mq = window.matchMedia("(max-width: 899px)");
+    const apply = () => {
+      const scrolls = mq.matches && host.scrollWidth > host.clientWidth + 1;
+      if (scrolls) {
+        host.setAttribute("tabindex", "0");
+        host.setAttribute("role", "region");
+        const t = host.querySelector("svg > title");
+        if (t) host.setAttribute("aria-label", t.textContent + " (scrolls horizontally)");
+      } else {
+        host.removeAttribute("tabindex");
+        host.removeAttribute("role");
+        host.removeAttribute("aria-label");
+      }
+    };
+    apply();
+    mq.addEventListener("change", apply);
   } catch (err) {
     /* Prose page: the fallbacks stand and the reader loses nothing. */
   }

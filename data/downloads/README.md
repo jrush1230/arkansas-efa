@@ -89,7 +89,15 @@ reconciliation checks and known anomalies: the site's Methodology page.
 
 ### `efa-absence-register.csv`
 
-17 rows. The verified absence register: things the published record does not contain, each scoped to exactly what was searched and dated to when, plus who obtained the data anyway where that is known.
+17 rows. The verified absence register: things the published record does not contain, each scoped to exactly what was searched, plus who obtained the data anyway where that is known. `evidence` is `searched` (someone looked — `checked` gives the date) or `documentary` (the report itself settles it — `citation` gives the reference).
+
+### `efa-homeschool-series.csv`
+
+29 rows. Home-schooled students in Arkansas by school year, 1997-98 to 2025-26 — the series behind the home-schooling chart. All home-schooled students, not only those with EFA accounts. DESE annual home school reports, as compiled in this project.
+
+### `efa-award-series.csv`
+
+4 rows. The per-account award by year, 2023-24 to 2026-27 — the series behind the 90%-rule chart. `allocated_usd` is the statutory 90% of the prior year's foundation rate (Ark. Code Ann. § 6-18-2505(a)(1)) and is computed, not transcribed; `net_to_family_usd` is what remains after the payment-platform fee withheld under § 6-18-2505(e)(2)(B), is not derivable, and carries its citation in `net_source`. Do not use the two interchangeably.
 
 
 ## Combined workbook

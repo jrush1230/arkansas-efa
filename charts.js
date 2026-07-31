@@ -13,16 +13,48 @@ import { el, svg, text, hover, css, money, dollars, num, titleCase, truncate, ba
 
 const W = 900;   // every chart's viewBox width; height varies
 
-/* Badge tier -> color token, so a tier drawn inside an SVG reads as the same
- * object as the HTML .verify-badge pill. Names only; the values live in
- * app.css and the tier list itself lives in build_efa_json.py's TIERS. */
-const TIER_TOKEN = {
-  published: "--verify-exact",
-  derived: "--verify-applied",
-  obtained: "--obtained",
-  reported: "--reported",
-  absent: "--verify-observed",
-};
+/* The funnel's per-row tier used to be drawn INSIDE the SVG, which needed a
+ * tier -> color-token map here. It is a table now, and a table row can carry the
+ * real .verify-badge pill from shared.js — the same object the rest of the page
+ * uses, with the same styling and the same word. The map was the workaround; it
+ * went with the chart.
+ */
+
+/* ── tables ─────────────────────────────────────────────────────────────────
+ *
+ * Four figures on this page are tables rather than charts, and each is a table
+ * for the same reason: a chart cannot draw an absence. A bar has no mark for
+ * "the state did not publish this", none for "this was not a category that
+ * year", and none for a value the source printed as "<1%" rather than as a
+ * number. It can only leave the bar out — and an omitted bar reads as a smaller
+ * quantity rather than as a missing measurement, which is the opposite of what
+ * the record says. Every table below carries at least one such cell.
+ *
+ * Same contract as the renderers: no datum is typed here. The values come from
+ * efa.json, and so do the not-a-value states.
+ */
+
+/** The eligibility table reproduces a string the source printed — "<1%" — and
+ *  the recipient table carries names transcribed from a PDF. Both reach the DOM
+ *  as text, so they are escaped rather than concatenated into markup. */
+const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+/** A cell the source does not fill. The words are always written out: a blank
+ *  cell reads as an oversight, and every one of these is a finding. */
+const gap = (txt, cls) => `<td class="${cls || ""} absent">${esc(txt)}</td>`;
+
+/** Render a table into a host, inside the same .table-scroll wrapper the
+ *  completeness audit and the reconciliation table already use. `head` is the
+ *  full contents of <thead>, so a table that needs two header rows can say so;
+ *  `caption` names the figure for a screen reader, the same job the SVG
+ *  <title> does on every chart. */
+function table(hostId, caption, head, body, cls) {
+  const host = document.getElementById(hostId);
+  if (!host) return;
+  host.innerHTML = `<div class="table-scroll"><table class="${cls || ""}">` +
+    `<caption class="sr-only">${caption}</caption>` +
+    `<thead>${head}</thead><tbody>${body}</tbody></table></div>`;
+}
 
 /* ── Part one: how big is it? ───────────────────────────────────────────── */
 
@@ -59,52 +91,49 @@ export function kpis(D, hostId) {
     `<div class="stat-sub">${sub} ${badge(kind)}</div></div>`).join("");
 }
 
-export function funnel(D, hostId) {
+/** Applications, approvals and active accounts — a TABLE, not a funnel.
+ *
+ *  A bar chart cannot draw an absence, and of these four rows only two are
+ *  counts. Six of the twelve count cells are things the state has not published:
+ *  in the funnel those years rendered as a shorter funnel, which reads as fewer
+ *  STAGES HAPPENING rather than fewer things being MEASURED — and the 2025-26
+ *  projection sat between two real counts looking exactly like them.
+ *
+ *  CORRECTION (carried from the funnel): the 2026-27 row starts at "approved".
+ *  The design pack drew an "applied" bar at 57,000, which the source gives only
+ *  as a spokesperson's "nearly 57,000" — a hedged round number. Drawing it
+ *  precisely would assert a precision the source disclaims.
+ *
+ *  CORRECTION (carried from the funnel): the tier is per row, not per section.
+ *  Two of these four years are published results; 2025-26 is the prior report's
+ *  forward-looking Outlook and 2026-27 is a department statement to a reporter.
+ *  A single section badge told the reader all four were published, which is
+ *  false for half of them. The tier now sits in the last column beside the
+ *  sentence that says what the figure actually is. */
+export function funnelTable(D, hostId) {
   const S = D.state_summary, ob = Object.fromEntries(
     D.obtained_2026_27.figures.map(f => [f.key, f.value]));
-  // CORRECTION: the 2026-27 row starts at "approved". The pack drew an
-  // "applied" bar at 57,000, which the source gives only as a spokesperson's
-  // "nearly 57,000" — a hedged round number. Drawing it precisely would assert
-  // a precision the source disclaims.
-  // CORRECTION: the tier is per row, not per section. Three of these four years
-  // are published; 2025-26 is the prior report's forward-looking Outlook and
-  // 2026-27 is a department statement to a reporter. A single section badge
-  // told the reader all four bars were published, which is false for half of
-  // them, so each row now carries its own tier and the section badge is gone.
   const badge37 = D.obtained_2026_27.figures.find(f => f.key === "approved_total").badge;
   const rows = [
     { y: "2023-24", a: S["34"].total_applicants, ap: S["34"].total_approved_applicants,
-      ac: S["34"].total_active_participants, tier: "published" },
+      ac: S["34"].total_active_participants, tier: "published",
+      what: "a counted result" },
     { y: "2024-25", a: S["35"].total_applicants, ap: S["35"].total_approved_applicants,
-      ac: S["35"].total_active_participants, tier: "published" },
-    { y: "2025-26", a: null, ap: D.derived.fy36_approved, ac: null,
-      tag: "outlook", tier: "published" },
-    { y: "2026-27", a: null, ap: ob.approved_total, ac: null,
-      tag: "stated to a reporter", tier: badge37 },
+      ac: S["35"].total_active_participants, tier: "published",
+      what: "a counted result" },
+    { y: "2025-26", a: null, ap: D.derived.fy36_approved, ac: null, tier: "published",
+      what: "<strong>a projection</strong>, made in the 2024-25 report's Outlook " +
+            "section before the year began" },
+    { y: "2026-27", a: null, ap: ob.approved_total, ac: null, tier: badge37,
+      what: "a department spokesperson's figure; in no state document" },
   ];
-  const RH = 62, PAD = 96, H = rows.length * RH + 34;
-  const max = Math.max(...rows.flatMap(r => [r.a, r.ap, r.ac].filter(v => v != null)));
-  const s = svg(hostId, W, H, "Applications, approvals and active accounts by year");
-  const x = v => PAD + v / max * (W - PAD - 150);   // room for value + word
-  rows.forEach((r, i) => {
-    const y0 = i * RH + 12;
-    text(s, 0, y0 + 20, r.y, "lbl");
-    [["a", r.a, .34, "Applied"], ["ap", r.ap, .68, "Approved"], ["ac", r.ac, 1, "Active"]]
-      .forEach(([, v, op, nm], j) => {
-        if (v == null) return;
-        const y = y0 + j * 12, bw = x(v) - PAD;
-        hover(el("rect", { x: PAD, y, width: Math.max(bw, 2), height: 9, rx: 4,
-          fill: css("--cat-1"), "fill-opacity": op }, s), `<b>${r.y} — ${nm}</b><br>${num(v)}`);
-        text(s, PAD + bw + 8, y + 4.5, num(v), "val");
-        text(s, PAD + bw + 8 + String(num(v)).length * 7.6 + 6, y + 4.5, nm.toLowerCase(), "ax");
-      });
-    // Per-row tier, in the label gutter beneath the year. Color follows the
-    // badge token so it reads as the same object as the HTML pills; the word is
-    // always present, because color is never the sole channel.
-    text(s, 0, y0 + 34, r.tier, "ax")
-      .setAttribute("fill", css(TIER_TOKEN[r.tier] || "--text-muted"));
-    if (r.tag) text(s, 0, y0 + 46, r.tag, "ax");
-  });
+  const cell = v => v == null ? gap("not published", "n") : `<td class="n">${num(v)}</td>`;
+  table(hostId, "Applications, approvals and active accounts by year",
+    "<tr><th>Year</th><th class='n'>Applied</th><th class='n'>Approved</th>" +
+    "<th class='n'>Active</th><th>What the approved figure is</th></tr>",
+    rows.map(r => `<tr><td class="nw"><strong>${r.y}</strong></td>` +
+      cell(r.a) + cell(r.ap) + cell(r.ac) +
+      `<td>${badge(r.tier)} — ${r.what}</td></tr>`).join(""));
 }
 
 /* ── Part two: who is in it? ────────────────────────────────────────────── */
@@ -135,89 +164,87 @@ export function sector(D, hostId) {
   text(s, PAD, 152, "Both bars drawn to the same width: the message is the mix, not the growth. Counts at right.", "ax");
 }
 
+/** Where participants came from — SPLIT BY WHAT IS COMPARABLE (S38).
+ *
+ *  One figure, two panels, and the split is the argument. The public-school
+ *  share is stated outright by both reports, so it is drawn for both years and
+ *  compared: 18% → 12%. Everything else is not comparable — the 2023-24 report
+ *  published a two-way split and the 2024-25 report published six categories —
+ *  so the breakdown panel draws the one year that has one.
+ *
+ *  CORRECTION (S31, open until now): the previous version ran both years against
+ *  a single six-part legend in which the same neutral swatch meant "not
+ *  previously public" for 2023-24 and "did not list" for 2024-25 — two
+ *  incompatible quantities sharing one key — and then captioned the whole thing
+ *  "not directly comparable", which discarded the one comparison the reports DO
+ *  support while inviting five they do not. Each panel now serves one year's
+ *  vocabulary, and no legend entry spans both. */
 export function prior(D, hostId) {
   const a = D.state_summary["34"], b = D.state_summary["35"];
-  const H = 210, PAD = 150, s = svg(hostId, W, H, "Where participants came from");
-  const bars = [
-    { y: "2023-24", seg: [
-      ["Not previously public", a.pct_prior_not_public_school, css("--neutral")],
-      ["Public school", a.pct_prior_public_school, css("--cat-1")]] },
-    { y: "2024-25", seg: [
-      ["Did not list", b.pct_prior_did_not_list, css("--neutral")],
-      ["Private school", b.pct_prior_private_school, css("--cat-3")],
-      ["Homeschool", b.pct_prior_homeschool, css("--cat-2")],
-      ["Public school", b.pct_prior_public_school, css("--cat-1")],
-      ["Pre-K", b.pct_prior_prek, css("--cat-7")],
-      ["Did not attend", b.pct_prior_did_not_attend_school, css("--cat-6")]] },
-  ];
-  bars.forEach((bar, i) => {
-    const y = 30 + i * 86; let cx = PAD;
-    text(s, 0, y + 14, bar.y, "lbl");
-    bar.seg.forEach(([nm, v, c]) => {
-      const bw = v / 100 * (W - PAD - 30);
+  const H = 268, PAD = 150, s = svg(hostId, W, H, "Where participants came from");
+  const barw = W - PAD - 30;
+  const seg = (segs, y, yr) => {
+    let cx = PAD;
+    segs.forEach(([nm, v, c]) => {
+      const bw = v / 100 * barw;
       hover(el("rect", { x: cx, y, width: Math.max(bw - 2, 2), height: 28, rx: 4, fill: c }, s),
-        `<b>${nm}</b><br>${v}% of ${bar.y} participants`);
+        `<b>${nm}</b><br>${v}% of ${yr} participants`);
       if (bw > 44) text(s, cx + bw / 2 - 1, y + 14, v + "%", "val", "middle")
         .setAttribute("fill", css("--page-plane"));
       if (bw > 58) text(s, cx + bw / 2 - 1, y + 44, nm, "ax", "middle");
       cx += bw;
     });
-  });
-  text(s, PAD, 196, "The 2023-24 report published a two-way split only; the categories are not comparable across years.", "ax");
+  };
+
+  // Panel one: the like-for-like comparison. Each year's remainder keeps its own
+  // source's words, so the neutral block never claims to be one quantity.
+  text(s, 0, 14, "Had attended an Arkansas public school the year before", "val");
+  [["2023-24", a.pct_prior_public_school,
+    ["Not previously public", a.pct_prior_not_public_school]],
+   ["2024-25", b.pct_prior_public_school,
+    ["Everything not public school", 100 - b.pct_prior_public_school]]]
+    .forEach(([yr, pub, [restNm, rest]], i) => {
+      const y = 32 + i * 62;
+      text(s, 0, y + 14, yr, "lbl");
+      seg([["Public school", pub, css("--cat-1")], [restNm, rest, css("--neutral")]], y, yr);
+    });
+
+  // Panel two: the breakdown, for the only year that published one.
+  const y2 = 186;
+  text(s, 0, y2 - 22, "How the 2024-25 file breaks down — the only year it does", "val");
+  text(s, 0, y2 + 14, "2024-25", "lbl");
+  seg([["Did not list", b.pct_prior_did_not_list, css("--neutral")],
+       ["Private school", b.pct_prior_private_school, css("--cat-3")],
+       ["Homeschool", b.pct_prior_homeschool, css("--cat-2")],
+       ["Public school", b.pct_prior_public_school, css("--cat-1")],
+       ["Pre-K", b.pct_prior_prek, css("--cat-7")],
+       ["Did not attend", b.pct_prior_did_not_attend_school, css("--cat-6")]], y2, "2024-25");
+  text(s, PAD, H - 6,
+    "The 2023-24 report published a two-way split only, so it has no row in the lower panel.", "ax");
 }
 
-export function eligibility(D, hostId) {
-  const a = D.state_summary["34"], b = D.state_summary["35"];
-  const rows = [
-    ["Students with disabilities", a.pct_eligibility_students_with_disabilities, b.pct_eligibility_students_with_disabilities],
-    ["First-time kindergarten", a.pct_eligibility_kindergarten, b.pct_eligibility_kindergarten],
-    ["Active-duty military", a.pct_eligibility_active_military, b.pct_eligibility_active_military],
-    ["Foster care", a.pct_eligibility_foster_care, b.pct_eligibility_foster_care],
-    ["D- or F-rated school", a.pct_eligibility_f_rated_school, b.pct_eligibility_d_or_f_rated_school],
-    ["Succeed Scholarship", null, b.pct_eligibility_succeed_program],
-    ["Law enforcement", null, b.pct_eligibility_law_enforcement],
-  ];
-  const H = 340, L = 250, R = W - 260, s = svg(hostId, W, H, "Eligibility category shares, 2023-24 to 2024-25");
-  const max = 60, y = v => H - 58 - (v / max) * (H - 102);
-  el("line", { x1: L, y1: 20, x2: L, y2: H - 58, class: "gl" }, s);
-  el("line", { x1: R, y1: 20, x2: R, y2: H - 58, class: "gl" }, s);
-  text(s, L, H - 36, "2023-24", "ax", "middle");
-  text(s, R, H - 36, "2024-25", "ax", "middle");
-  const decollide = (pts, lo, hi) => {          // two-pass label placement
-    const MIN = 16, n = pts.length; pts.sort((p, q) => p.y - q.y);
-    for (let i = 1; i < n; i++) pts[i].y = Math.max(pts[i].y, pts[i - 1].y + MIN);
-    pts[n - 1].y = Math.min(pts[n - 1].y, hi);
-    for (let i = n - 2; i >= 0; i--) pts[i].y = Math.min(pts[i].y, pts[i + 1].y - MIN);
-    pts[0].y = Math.max(pts[0].y, lo);
-    for (let i = 1; i < n; i++) pts[i].y = Math.max(pts[i].y, pts[i - 1].y + MIN);
-    return pts;
-  };
-  const LO = 24, HI = H - 58;
-  const ly1 = {}, ly2 = {};
-  decollide(rows.filter(r => r[1] != null).map(r => ({ nm: r[0], y: y(r[1]) })), LO, HI)
-    .forEach(p => ly1[p.nm] = p.y);
-  decollide(rows.map(r => ({ nm: r[0], y: y(r[2]) })), LO, HI).forEach(p => ly2[p.nm] = p.y);
-  rows.forEach(([nm, av, bv]) => {
-    const c = nm.startsWith("Students with") ? css("--cat-1")
-            : nm.startsWith("Active") ? css("--cat-2") : css("--neutral");
-    const emph = c !== css("--neutral");
-    if (av != null) {
-      hover(el("line", { x1: L, y1: y(av), x2: R, y2: y(bv), stroke: c,
-        "stroke-width": emph ? 2.5 : 1.5, "stroke-opacity": emph ? 1 : .55 }, s),
-        `<b>${nm}</b><br>${av}% → ${bv}%`);
-      el("circle", { cx: L, cy: y(av), r: 4, fill: c, "fill-opacity": emph ? 1 : .55 }, s);
-      if (Math.abs(ly1[nm] - y(av)) > 3)
-        el("line", { x1: L - 6, y1: y(av), x2: L - 12, y2: ly1[nm], stroke: c,
-          "stroke-width": 1, "stroke-opacity": .45 }, s);
-      text(s, L - 10, ly1[nm], `${nm}  ${av}%`, emph ? "val" : "lbl", "end");
-    }
-    el("circle", { cx: R, cy: y(bv), r: 4, fill: c, "fill-opacity": emph ? 1 : .55 }, s);
-    if (Math.abs(ly2[nm] - y(bv)) > 3)
-      el("line", { x1: R + 6, y1: y(bv), x2: R + 12, y2: ly2[nm], stroke: c,
-        "stroke-width": 1, "stroke-opacity": .45 }, s);
-    text(s, R + 10, ly2[nm], av == null ? `${bv}%  ${nm} (new)` : `${bv}%`,
-      emph ? "val" : "lbl", "start");
-  });
+/** Who qualified, and under which door — a TABLE, not a slope chart.
+ *
+ *  Three cells must read "not a category", one must read "<1%", and the two
+ *  columns are not a like-for-like series: three doors appear only in the second
+ *  year and one widened between them. A grouped or slope chart can express none
+ *  of that. The slope chart it replaces drew a single line from the 2023-24
+ *  F-rated door to the 2024-25 D-or-F door, which asserted a like-for-like rise
+ *  from 1% to 3% that neither report supports.
+ *
+ *  The shape — which door existed in which year, and what the report printed
+ *  where it printed no number — is declared in build_efa_json.py's ELIGIBILITY
+ *  and resolved against the upstream metrics there. Nothing is decided here. */
+export function eligibilityTable(D, hostId) {
+  const E = D.eligibility;
+  const cell = c => c.pct != null ? `<td class="n">${c.pct}%</td>`
+    : c.printed != null ? `<td class="n">${esc(c.printed)}</td>`
+    : gap(c.note, "n");
+  table(hostId, "Qualifying category shares, by year",
+    "<tr><th>Qualifying category</th>" +
+    E.years.map(y => `<th class='n'>${y}</th>`).join("") + "</tr>",
+    E.rows.map(r => `<tr><td>${r.label}</td>${r.cells.map(cell).join("")}</tr>`).join(""),
+    "measured");
 }
 
 export function moneyChart(D, hostId) {
@@ -368,26 +395,20 @@ export function concentration(D, hostId, summaryId) {
     D.recipients.concentration.map(c => `top ${c.k} — ${(c.share * 100).toFixed(0)}%`).join("  ·  ");
 }
 
-export function topRecipients(D, hostId) {
-  // CORRECTION: the caption sat at H-4 with a middle baseline, which put its
-  // bottom edge 1.9px outside the viewBox and clipped the descenders — the same
-  // defect fixed on the award chart at 19d5f37. Growing H alone does not fix it
-  // (the caption is positioned FROM H and simply moves down with it); the
-  // offset has to grow too. +34 with the caption at H-14 leaves 8px of margin.
-  const t = D.recipients.top, RH = 25, PAD = 310, H = t.length * RH + 34;
-  const s = svg(hostId, W, H, "The twenty largest recipients of funds");
-  const max = t[0].amount;
-  const RETAIL = ["BEST BUY", "AMAZON", "LAKESHORE", "OFFICE DEPOT", "STAPLES"];
-  t.forEach((r, i) => {
-    const y = 14 + i * RH, bw = r.amount / max * (W - PAD - 110);
-    text(s, PAD - 12, y + 8, (i + 1) + ". " + r.display, "lbl", "end");
-    const isVendor = RETAIL.some(k => r.name.toUpperCase().startsWith(k));
-    hover(el("rect", { x: PAD, y, width: Math.max(bw, 2), height: 16, rx: 4,
-      fill: isVendor ? css("--cat-2") : css("--cat-1") }, s),
-      `<b>${r.name}</b><br>${dollars(r.amount)}`);
-    text(s, PAD + bw + 9, y + 8, dollars(r.amount), "val");
-  });
-  text(s, PAD, H - 14, "Orange marks a national retailer rather than a school or education provider.", "ax");
+/** The twenty largest recipients — a TABLE, folded in beneath the curve.
+ *
+ *  This was the only section on the page with no prose at all: heading, chart,
+ *  source line. It also redrew the head of the concentration curve directly
+ *  above it, which already annotates Best Buy and the median. As a table the
+ *  names become readable and copyable rather than axis labels, and the
+ *  duplicated figure goes away. */
+export function topRecipientsTable(D, hostId) {
+  table(hostId, "The twenty largest recipients of funds",
+    "<tr><th class='n'>Rank</th><th>Recipient</th><th class='n'>Received</th></tr>",
+    D.recipients.top.map((r, i) =>
+      `<tr><td class="n">${i + 1}</td><td>${esc(r.display)}</td>` +
+      `<td class="n">${dollars(r.amount)}</td></tr>`).join(""),
+    "measured");
 }
 
 /* ── Part four: which schools? ──────────────────────────────────────────── */
@@ -418,9 +439,17 @@ export function shareOfEnrollment(D, hostId) {
   });
 }
 
-export function growth(D, hostId) {
-  const m = D.schools_joined.filter(r => !r.new_entrant)
+/** The schools the growth chart draws: matched on an exact normalized name and
+ *  ranked by voucher students gained. One selection, used by both the chart and
+ *  the table beneath it — two would drift, and a table that does not list the
+ *  rows drawn above it is worse than no table. */
+function growthRows(D) {
+  return D.schools_joined.filter(r => !r.new_entrant)
     .sort((a, b) => (b.efa35 - b.efa34) - (a.efa35 - a.efa34)).slice(0, 26);
+}
+
+export function growth(D, hostId) {
+  const m = growthRows(D);
   const RH = 22, PAD = 250, H = m.length * RH + 42;
   const s = svg(hostId, W, H, "Change in voucher students per school, 2023-24 to 2024-25");
   const max = Math.max(...m.map(r => r.efa35));
@@ -439,31 +468,49 @@ export function growth(D, hostId) {
   text(s, PAD, H - 12, "Voucher students per school. Dumbbell: 2023-24 to 2024-25.", "ax");
 }
 
-export function impliedDollars(D, hostId) {
-  const a34 = D.award.by_fy["34"].allocated, a35 = D.award.by_fy["35"].allocated;
-  const m = D.schools_joined.filter(r => !r.new_entrant)
-    .sort((a, b) => (b.implied35 - b.implied34) - (a.implied35 - a.implied34)).slice(0, 18);
-  const RH = 30, PAD = 250, H = m.length * RH + 42;
-  const s = svg(hostId, W, H, "Implied full-year dollars per school, derived");
-  const max = Math.max(...m.map(r => r.implied35));
-  const x = v => v / max * (W - PAD - 124);
-  m.forEach((r, i) => {
-    const y = 14 + i * RH;
-    text(s, PAD - 12, y + 10, truncate(r.name, 36), "lbl", "end");
-    hover(el("rect", { x: PAD, y: y + 1, width: Math.max(x(r.implied34), 1), height: 8, rx: 4,
-      fill: css("--neutral") }, s),
-      `<b>${r.name}</b><br>2023-24 implied: ${dollars(r.implied34)}<br><span style="opacity:.75">${r.efa34} students × ${dollars(a34)}</span>`);
-    hover(el("rect", { x: PAD, y: y + 11, width: Math.max(x(r.implied35), 1), height: 8, rx: 4,
-      fill: css("--cat-3") }, s),
-      `<b>${r.name}</b><br>2024-25 implied: ${dollars(r.implied35)}<br><span style="opacity:.75">${r.efa35} students × ${dollars(a35)}</span>`);
-    text(s, PAD + x(r.implied35) + 9, y + 5, money(r.implied35), "val");
-    text(s, PAD + x(r.implied35) + 9, y + 18, "+" + money(r.implied35 - r.implied34), "ax");
-  });
-  text(s, PAD, H - 12, "Implied full-year dollars = voucher students × that year's account value. Ranked by increase.", "ax");
+/** Implied dollars — a COLUMN PAIR beneath the growth chart, not a chart.
+ *
+ *  The award is one statewide figure per year, so multiplying every school by it
+ *  reproduces the shape of the chart above exactly: the old chart drew the same
+ *  ranking twice, once in students and once in dollars. But the QUANTITY is not
+ *  redundant — per-school dollars do not exist in the published record for
+ *  2023-24 at all — so it survives as two columns beside the counts it is
+ *  computed from, where a reader can see the arithmetic rather than a second
+ *  picture of it. The dollar columns are badged `derived` in the header. */
+export function impliedDollarsTable(D, hostId) {
+  const a34 = D.award.by_fy["34"], a35 = D.award.by_fy["35"];
+  const yrs = [a34.school_year, a35.school_year];
+  // Two header rows, so the `derived` badge sits over the pair of dollar
+  // columns it qualifies rather than being repeated on each. The student
+  // columns are published counts and carry no badge, which is the distinction
+  // the whole table exists to make visible.
+  table(hostId, "Voucher students and implied full-year dollars, by school",
+    "<tr><th rowspan='2'>School</th>" +
+    "<th class='n' colspan='2'>Voucher students</th>" +
+    `<th class='n' colspan='2'>Implied full-year dollars ${badge("derived")}</th></tr>` +
+    "<tr>" + yrs.concat(yrs).map(y => `<th class='n th-sub'>${y}</th>`).join("") + "</tr>",
+    growthRows(D).map(r => `<tr><td>${esc(r.name)}</td>` +
+      `<td class="n">${num(r.efa34)}</td><td class="n">${num(r.efa35)}</td>` +
+      `<td class="n">${dollars(r.implied34)}</td>` +
+      `<td class="n">${dollars(r.implied35)}</td></tr>`).join(""));
 }
 
+/** Appendix B against implied full-year dollars — the one-semester cross-check.
+ *
+ *  Lives on the methodology page from S38: it validates a METHOD, not a finding
+ *  about vouchers, and the one-semester claim is corroborated on the main page
+ *  already by the 51.1% reconciliation row, which needs no reconstruction.
+ *
+ *  CORRECTION (S31 finding F11): the chart drew every school with 25 or more
+ *  voucher students — 69 dots — while its own generated note described the 45
+ *  schools with 60 or more. Two populations in one figure. Both medians happen
+ *  to round to 47.6%, which is why it survived a year of reading. The threshold
+ *  is now taken from semester_check's own declared `threshold_students`, so the
+ *  dots drawn and the schools described are one population by construction and a
+ *  renderer cannot pick a second one. */
 export function semesterCheck(D, hostId, noteId) {
-  const m = D.schools_joined.filter(r => r.appendixB && r.efa35 >= 25 && r.ratio != null);
+  const thr = D.semester_check.threshold_students;
+  const m = D.schools_joined.filter(r => r.appendixB && r.efa35 >= thr && r.ratio != null);
   const H = 340, PADL = 76, PADB = 52;
   const s = svg(hostId, W, H, "Appendix B spring dollars against implied full-year dollars");
   const maxI = Math.max(...m.map(r => r.implied35));
@@ -484,7 +531,8 @@ export function semesterCheck(D, hostId, noteId) {
       `<b>${r.name}</b><br>implied full year ${dollars(r.implied35)}<br>Appendix B (spring) ${dollars(r.appendixB)}<br>ratio ${(r.ratio * 100).toFixed(0)}%`);
   });
   text(s, PADL, H - 16,
-    "x: implied full-year dollars · y: Appendix B spring dollars · one dot per school (25+ voucher students)", "ax");
+    `x: implied full-year dollars · y: Appendix B spring dollars · one dot per school ` +
+    `(${thr}+ voucher students, ${m.length} of them)`, "ax");
 
   const sc = D.semester_check;
   const low = m.filter(r => r.ratio < 0.38).sort((a, b) => a.ratio - b.ratio);
@@ -497,8 +545,8 @@ export function semesterCheck(D, hostId, noteId) {
     `of the same report's full-year all-student total of ${money(D.categories_totals.amount)}. ` +
     (low.length ? `${low.length} school${low.length === 1 ? "" : "s"} in orange fall well below half ` +
       `(${low[0].name}: ${low[0].efa35} students, ${dollars(low[0].appendixB)} in Appendix B), which most likely means ` +
-      `their spring transactions sit under a different name in the appendix — the same identifier problem as below, ` +
-      `in a second guise. ` : "") +
+      `their spring transactions sit under a different name in the appendix — the same identifier problem this page ` +
+      `documents, in a second guise. ` : "") +
     `<span class="pill obs">cross-checked</span>`;
 }
 
@@ -886,6 +934,11 @@ export function registerCounts(D) {
     // counting it would claim a receipt that does not exist.
     obtained: D.register.filter(r =>
       r.obtained_by && !/^not obtainable/i.test(r.obtained_by)).length,
+    // The two evidence kinds, counted here so the source line under the
+    // register states the split from the data instead of asserting a universal
+    // property it does not have.
+    searched: D.register.filter(r => r.evidence === "searched").length,
+    documentary: D.register.filter(r => r.evidence === "documentary").length,
   };
 }
 
@@ -908,11 +961,21 @@ export function register(D, hostId) {
     // and is one click away. Two real spans rather than CSS ::content: the text
     // is selectable, findable with ctrl-F, and survives a stylesheet failure.
     const shows = r.obtained_by ? "show the probe and the receipt" : "show the probe";
+    // The evidence line. Two kinds, and the row says which it is rather than
+    // leaving a reader to infer it from whether a date happens to be present.
+    // A searched row is true as of a date; a documentary row is true because a
+    // fixed document says so, and re-checking it tomorrow cannot change that.
+    // Rendered from the fields, never from the probe prose — the prose is where
+    // four dates went missing while the page claimed every row had one.
+    const ev = r.evidence === "searched"
+      ? `<b>Searched.</b> Last checked ${r.checked}.`
+      : `<b>Documentary.</b> ${r.citation}`;
     return `<details class="regrow">
       <summary><span class="f">${r.field}</span>` +
       `<span class="k" style="background:var(${bg});color:var(${fg})">${r.kind}</span>` +
       `<span class="hint hint-shut">${shows}</span><span class="hint hint-open">hide</span></summary>
       <div class="probe"><strong style="color:var(--text-muted);font-weight:600">Probe.</strong> ${r.probe}</div>
+      <div class="ev ev-${r.evidence}">${ev}</div>
       ${r.obtained_by ? `<div class="got"><b>Obtained by.</b> ${r.obtained_by}</div>` : ""}
     </details>`;
   }).join("");

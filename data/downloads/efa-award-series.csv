@@ -1,0 +1,5 @@
+efa_fy,school_year,foundation_prior_school_year,foundation_prior_year_usd,pct_of_prior_foundation,allocated_exact_usd,allocated_usd,succeed_allocated_usd,net_to_family_usd,net_quarterly_usd,implied_withholding,net_source
+34,2023-24,2022-23,7413.0,0.9,6671.7,6672,7413,,,,
+35,2024-25,2023-24,7618.0,0.9,6856.2,6856,7618,,,,
+36,2025-26,2024-25,7771.0,0.9,6993.900000000001,6994,7771,6864,1716.0,0.018573,"DESE, EFA Information for Families and the linked FAQ: “These amounts represent the net amount to the student after transaction fees” — $6864 total, $1716 quarterly."
+37,2026-27,2025-26,8162.0,0.9,7345.8,7346,8162,7208,1802.0,0.018759,"Arkansas Democrat-Gazette, 14 March 2026, reporting the Education Department's figures; corroborated by School Choice Arkansas (ADE-partnered), “$1,802 per quarter, for a total of $7,208”."
