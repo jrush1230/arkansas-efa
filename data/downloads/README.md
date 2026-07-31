@@ -14,7 +14,7 @@ Every file carries a `source_file` column naming the PDF each row came from,
 so any cell can be traced back to the page it was printed on. Full method,
 reconciliation checks and known anomalies: the site's Methodology page.
 
-## Three things to read before using these files
+## Four things to read before using these files
 
 1. **`efa-recipients-2024-25-spring.csv` is one semester, not one year.** The
    2024-25 report's Appendix B covers spring 2025 transactions only; the report
@@ -36,6 +36,18 @@ reconciliation checks and known anomalies: the site's Methodology page.
    the disambiguating city is stripped. Any cross-year join has to be
    exact-normalized and has to report its miss rate. A school cannot be tracked
    reliably across two years of its own program.
+
+4. **Two files give different Succeed Scholarship award figures, on purpose.**
+   `efa-statewide-summary.csv` carries $7,617 and `efa-award-series.csv`
+   carries $7,618 for the same 2024-25 quantity. This is a defect in the
+   source, reproduced rather than patched, and the difference is the point:
+
+   Former Succeed Scholarship participants receive 100% of the prior year's foundation funding under § 6-18-2505(a)(2). The 2024-25 annual report prints two different figures for this: $7,617 on p3 and $7,618 on p5. $7,618 is 100% of the 2023-24 foundation rate exactly, so p3 is a typo in the source. efa_state_summary.csv captured p3's figure; it is reported here as the source defect it is, not silently corrected.
+
+   The statewide summary is a transcription and keeps what the report printed;
+   the award series is computed from the foundation rate and is therefore the
+   figure to use. Correcting the transcription would destroy the evidence that
+   the source contradicts itself.
 
 ## Files
 
@@ -103,4 +115,4 @@ reconciliation checks and known anomalies: the site's Methodology page.
 ## Combined workbook
 
 `arkansas-efa-published-record.xlsx` carries every table above as one sheet
-each, with a Read Me sheet repeating the three warnings.
+each, with a Read Me sheet repeating the warnings above.

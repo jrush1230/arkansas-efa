@@ -133,6 +133,11 @@ function wireChartScroll() {
 function proseFigures(D) {
   const fig = Object.fromEntries(D.obtained_2026_27.figures.map(f => [f.key, f.value]));
   const s34 = D.state_summary["34"], s35 = D.state_summary["35"];
+  // The three appropriations records behind the $309m ceiling and the one that
+  // corroborates it. Located by (fy, measure) rather than by index: the
+  // appropriations array is source-ordered and a new record would shift it.
+  const approp = (fy, measure) =>
+    D.appropriations.find(r => r.fy === fy && r.measure === measure);
   // money() rounds to whole millions above $10m, which prints the first year's
   // spend as $35m — the same overstatement, one order down. One decimal here.
   const oneDp = v => "$" + (v / 1e6).toFixed(1) + "m";
@@ -185,6 +190,28 @@ function proseFigures(D) {
     processing_fee_34: dollars(D.derived.providers_34_processing_fee),
     largest_shop_34: D.derived.providers_34_largest_shop,
     recipients_n: num(D.recipients.n),
+    // Part two's opening sentence. It used to say the five 2025-26 figures "do
+    // not agree", which mischaracterized them: they measure five different
+    // quantities — a base appropriation, a reserve authorization, its transfer,
+    // a supplemental and its matching transfer — not five rival estimates of
+    // one. The defensible point is that no single document totals them. Both
+    // counts are bound because they differ: two of the five are separate
+    // approvals printed in one ALC-PEER exhibit, so five figures come from four
+    // documents, and the sentence is wrong the moment a sixth record lands.
+    money_figures_36: word(D.appropriations.filter(r => r.fy === 36).length),
+    money_docs_36: word(new Set(D.appropriations.filter(r => r.fy === 36)
+      .map(r => r.url)).size),
+    // The $309m ceiling is one of the page's `derived` figures, and the badge
+    // definition promises every one of them a cross-check against a different
+    // published figure. This one's had none surfaced anywhere. The corroboration
+    // is Act 156 of 2026: the enacted 2026-27 base appropriation is the same
+    // figure to the dollar. That is corroboration, not verification — see the
+    // note in #money, which says so explicitly rather than letting the match
+    // imply more than it earns.
+    approp_base_36: dollars(approp(36, "appropriated").amount),
+    approp_supp_36: dollars(approp(36, "supplemental").amount),
+    approp_ceiling_exact: dollars(D.derived.appropriated_36_with_supplement),
+    approp_37_exact: dollars(approp(37, "appropriated").amount),
     // The two account values the implied-dollar columns multiply by. One
     // statewide figure per year, which is why the dollar ranking cannot differ
     // from the student ranking — the sentence saying so has to carry the

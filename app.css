@@ -148,10 +148,16 @@
   }
 }
 
-/* Respect a reader's data-theme override the same way the Artifact/enrollment
-   conventions do -- explicit toggle wins over the OS preference in both
-   directions. (Present for parity; the static site itself ships no toggle
-   today, but any future one will Just Work.) */
+/* Set color-scheme from an explicit data-theme override, so form controls and
+   scrollbars follow it. NOTE: this is all these rules do -- the ~30 color
+   tokens above are declared once at :root and once inside the
+   prefers-color-scheme media query, and nothing here overrides them. A reader
+   who sets data-theme="dark" under a light OS preference gets dark form
+   controls on a light page.
+   A real toggle would need the dark token block duplicated under
+   :root[data-theme="dark"]; that has not been done, and it is not free --
+   spot_check family E asserts the shared token block is byte-identical across
+   all three sites, so it would have to land in all of them at once. */
 :root[data-theme="light"] { color-scheme: light; }
 :root[data-theme="dark"]  { color-scheme: dark; }
 
@@ -676,7 +682,10 @@ details.srcnote .srcline {
 
 /* Register: the count-by-kind chips carry the distribution, which is the
    finding; each probe collapses to one line beneath them. */
-.reg-summary { display: flex; flex-wrap: wrap; gap: 7px; margin: 0 0 4px; max-width: none; }
+.reg-summary { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; margin: 0 0 4px; max-width: none; }
+/* The vintage of the count-by-kind chips. Deliberately not a chip: it dates
+   them rather than being one of them. */
+.reg-summary .reg-asof { color: var(--text-muted); font-size: 12px; }
 details.regrow { border-bottom: 1px solid var(--gridline); padding: 9px 2px; }
 details.regrow:last-child { border-bottom: 0; }
 details.regrow > summary {

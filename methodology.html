@@ -70,8 +70,8 @@ homeschool count series. The page draws all of it, and then records what is miss
   <dd>The state printed it in a report or an appropriation act. Reproduced, not recalculated.
   Where the source states a total, the transcription is checked against it.</dd>
   <dt><span class="verify-badge" data-verify="derived"><span class="verify-dot"></span>derived</span></dt>
-  <dd>Arithmetic on published figures, with the arithmetic shown, plus an independent cross-check
-  against a different published figure.</dd>
+  <dd>Arithmetic on published figures, with the arithmetic shown, plus a cross-check against a
+  different published figure, stated with what it does and does not establish.</dd>
   <dt><span class="verify-badge" data-verify="obtained"><span class="verify-dot"></span>obtained</span></dt>
   <dd>State-held records released to a named requester under freedom-of-information law and
   published by someone else &mdash; not published by the state.</dd>
@@ -167,7 +167,7 @@ defect is closed by a test.</p>
 <p>The check script <strong>does not trust the data file</strong>: it reads the source tables,
 re-derives every quantity independently, and compares &mdash; including re-implementing the name
 normalization rather than importing it, so a bug shared between builder and checker cannot pass.
-Current count: <strong>709 assertions, all passing.</strong></p>
+Current count: <strong>783 assertions, all passing.</strong></p>
 
 <h2>Derived figures, and what cross-checks them</h2>
 <p><strong>Implied per-school dollars</strong> = a school's participants &times; that year's
@@ -196,6 +196,18 @@ prior year's foundation rate, and all four match the published figures exactly (
 $6,994 / $7,346). The chart therefore demonstrates the statute rather than restating it. The
 <em>net</em> amounts ($6,864 and $7,208) are not derivable and are carried as cited constants; no
 net figure was published for 2023-24 or 2024-25, so none is drawn for those years.</p>
+
+<p><strong>The 2025-26 appropriation ceiling of $309,487,318</strong> is the base appropriation
+($277,487,318, Act 1010 of 2025 &sect;&nbsp;24) plus the $32,000,000 temporary increase the
+Legislative Council approved on 16 January 2026. No document prints the total: the PEER exhibit
+records the $32,000,000 and not the ceiling it produces. Its corroboration is <strong>Act 156 of
+the 2026 Fiscal Session (HB1005), &sect;&nbsp;23</strong>, which appropriates $309,487,318 as the
+2026-27 base &mdash; the same figure to the dollar. This is the weakest of the cross-checks on this
+page and is labeled as such on the main page: the legislature appears to have set the next year's
+base at the level this year finished on, so the match may be structural rather than two sources
+agreeing independently. It establishes that the figure is one the state has itself enacted for this
+program, not that the addition was performed correctly &mdash; for that, both inputs are published
+and the addition is shown.</p>
 
 <h2>Matching, and why there is no fuzzy matching anywhere</h2>
 <p>Schools appear by name only &mdash; no code, no ID, no address. Matching is <strong>exact on a

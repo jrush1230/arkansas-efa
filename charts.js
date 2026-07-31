@@ -275,9 +275,13 @@ export function moneyChart(D, hostId) {
         `<span style="opacity:.75">${r.as_of} · ${r.source}</span>`);
     });
   });
+  // Figures and documents are different counts: the two ALC-PEER items dated
+  // 2026-01-16 are two approvals printed in one exhibit, so five figures come
+  // from four documents. Count the distinct URLs rather than assuming 1:1.
   const n36 = (byFy[36] || []).length;
+  const doc36 = new Set((byFy[36] || []).map(r => r.url)).size;
   const spent34 = (byFy[34] || []).find(r => r.measure === "spent");
-  text(s, xs(36) - 16, y(2.8e8), `2025-26: ${n36} figures, ${n36} documents  →`, "ax", "end");
+  text(s, xs(36) - 16, y(2.8e8), `2025-26: ${n36} figures, ${doc36} documents  →`, "ax", "end");
   if (spent34) text(s, xs(34) + 16, y(spent34.amount), money(spent34.amount) + " actually spent", "ax");
 }
 
@@ -374,7 +378,9 @@ export function concentration(D, hostId, summaryId) {
   let d = "";
   cur.forEach((p, i) => { d += (i ? "L" : "M") + lx(p.rank).toFixed(1) + " " + ly(p.amount).toFixed(1); });
   el("path", { d, fill: "none", stroke: css("--cat-1"), "stroke-width": 2 }, s);
-  // Annotate the three marks the prose names, located by rank in the data.
+  // Annotate three marks, located by rank in the data: the largest recipient,
+  // Best Buy -- the only one the prose names -- and Amazon. The other two are
+  // the chart's own editorial choice, not an illustration of the text.
   [[0, -24], [3, -14], [13, 26]].forEach(([idx, dy]) => {
     const t = D.recipients.top[idx]; if (!t) return;
     const p = cur[idx], px = lx(p.rank), py = ly(p.amount);
@@ -954,6 +960,11 @@ export function register(D, hostId) {
       return `<span class="k" style="background:var(${bg});color:var(${fg})">` +
              `${counts.byKind[k]} ${k}</span>`;
     }).join("");
+  // The chips became the register's headline when the page was shortened, and
+  // an undated count of absences invites the reader to assume it is current.
+  // meta.checked is the date every `searched` row carries and is the same field
+  // build_vintage.py publishes as register_checked -- one source, not a second.
+  const asOf = `<span class="reg-asof">searched ${longDate(D.meta.checked)}</span>`;
 
   const rows = D.register.map(r => {
     const [fg, bg] = REGISTER_KIND[r.kind] || ["--verify-observed", "--verify-observed-bg"];
@@ -981,7 +992,7 @@ export function register(D, hostId) {
   }).join("");
 
   document.getElementById(hostId).innerHTML =
-    `<p class="reg-summary">${chips}</p>${rows}`;
+    `<p class="reg-summary">${chips}${asOf}</p>${rows}`;
 }
 
 export function completeness(D, hostId) {
